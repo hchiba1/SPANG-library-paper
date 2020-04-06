@@ -15,7 +15,7 @@
 
 \begin{document}
 %
-\title{SPANG: a controlled query set with the FAIR principle}
+\title{SPANG: constructing a controlled set of queries with the FAIR principle}
 %
 \titlerunning{SPANG library}
 % If the paper title is too long for the running head, you can set
@@ -118,9 +118,50 @@ we constructed controlled SPARQL queries for available SPARQL endpoints.
 
 The following section includes: overview of the SPANG project, specification of SPANG templates, implementation of the SPANG library, and use case of SPANSG library.
 
+%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The FAIR principle}
+
+Not only the RDF dataset, but also the SPARQL queries are important resource to be shared on the Semantic Web platform. Thus, we applied the FAIR principle which have been applied to the RDF datasets, into SPARQL queries.
+
+Here we overview the preliminaries for the FAIR principle.
+It shoulbe noted that the FIAR principle can be applied not only to the dataset resources but also to other type of resources including software tools.
+
+Here, we provide the FAIR principle in the context of SPARQL queries.
+
+\subsection{Findable}
+\begin{itemize}
+    \item Assign global identifier
+    \item Rich metadata
+    \item Include the identifier of the data they describe
+    \item Registered and indexed
+\end{itemize}
+
+\subsection{Accessible}
+\begin{itemize}
+    \item Retrievable by identifier
+    \item Metadata are accessible
+\end{itemize}
+
+\subsection{Interoperable}
+\begin{itemize}
+    \item Use a formal, accessible, shared, and broadly applicable language for knowledge representation.
+    \item Use vocabularies that follow FAIR principles.
+    \item Include qualified references to others
+\end{itemize}
+
+\subsection{Reusable}
+\begin{itemize}
+    \item Richly described with a plurality of accurate and relevant attributes
+    \begin{itemize}
+        \item released with a clear and accessible data usage license
+        \item associated with detailed provenance
+        \item meet domain-relevant community standards
+    \end{itemize}
+\end{itemize}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%
-\section{Overview}
+\section{SPANG overview}
 Here we overview the structure of this paper.
 
 \subsection{SPARQL metadata}
@@ -145,9 +186,7 @@ According to the metadata and parameterization mechanism, we can construct a con
 
 As an interface the the SPANG library, we constructed a command-line interface.
 
-%%%%%%%%%%%%%%%%%%%%%%%%
-
-\section{SPANG}
+\subsection{SPANG portal}
 SPANG is originally developed for "SARQLing" the RDF dataset from command line. Here, we re-implemented the SPANG using Node.js and now the functionality is available through Web browser. 
 
 Figure~\ref{fig:spang_top} is the top page of SPANG, which includes links to GitHub, Documentation, and SPANG library.
@@ -197,7 +236,7 @@ Figure~\ref{fig:spang_disease_gene_result} shows the result of the query. Thus, 
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%
-\section{SPANG library}
+\section{SPANG specifications}
 
 Here, we constructed SPANG library: a SPARQL library which is findable, accessible, interoperable and reusable.
 
@@ -414,192 +453,7 @@ The following command searches for queries with keywords.
 
       ]
     },
-    {
-      "name": "gene_disease",
-      "title": "Get disease associated with NCBI gene ID",
-      "uri": "http://localhost:7070/api/disgenet/gene_disease",
-      "endpoint": "http://rdf.disgenet.org/sparql/",
-      "param": [
-        {
-          "name": "arg1",
-          "default": "675"
-        }
-      ]
-    },
-    {
-      "name": "get_gda",
-      "title": "Get specific type of gene-disease association",
-      "uri": "http://localhost:7070/api/disgenet/get_gda",
-      "endpoint": "http://rdf.disgenet.org/sparql/",
-      "param": [
-        {
-          "name": "arg1",
-          "default": "SIO_001120"
-        },
-        {
-          "name": "arg2",
-          "default": "10"
-        }
-      ]
-    },
-    {
-      "name": "list_gda_sources",
-      "title": "List sources of gene-disease association",
-      "uri": "http://localhost:7070/api/disgenet/list_gda_sources",
-      "endpoint": "http://rdf.disgenet.org/sparql/",
-      "param": [
-
-      ]
-    },
-    {
-      "name": "list_gene_disease",
-      "title": "List gene disease associations",
-      "uri": "http://localhost:7070/api/disgenet/list_gene_disease",
-      "endpoint": "http://rdf.disgenet.org/sparql/",
-      "param": [
-        {
-          "name": "arg1",
-          "default": "10"
-        }
-      ]
-    },
-    {
-      "name": "regex_disease",
-      "title": "Search the NCI Thesaurus for specific diseases",
-      "uri": "http://localhost:7070/api/disgenet/regex_disease",
-      "endpoint": "http://rdf.disgenet.org/sparql/",
-      "param": [
-        {
-          "name": "arg1",
-          "default": "breast"
-        }
-      ]
-    },
-    {
-      "name": "regex_gda_disease",
-      "title": "Regex seach for specific diseases that have gene-disease association information",
-      "uri": "http://localhost:7070/api/disgenet/regex_gda_disease",
-      "endpoint": "http://rdf.disgenet.org/sparql/",
-      "param": [
-        {
-          "name": "arg1",
-          "default": "alzheimer"
-        }
-      ]
-    },
-    {
-      "name": "uniprot2disease",
-      "title": "Get diseases associated with given UniProt IDs",
-      "uri": "http://localhost:7070/api/disgenet/uniprot2disease",
-      "endpoint": "http://rdf.disgenet.org/sparql/",
-      "param": [
-
-      ]
-    },
-    {
-      "name": "uniprot2disease_curated",
-      "title": "Get diseases associated with given UniProt IDs",
-      "uri": "http://localhost:7070/api/disgenet/uniprot2disease_curated",
-      "endpoint": "http://rdf.disgenet.org/sparql/",
-      "param": [
-
-      ]
-    },
-    {
-      "name": "uniprot2disease_curated_none",
-      "title": "Get diseases associated with given UniProt IDs",
-      "uri": "http://localhost:7070/api/disgenet/uniprot2disease_curated_none",
-      "endpoint": "http://rdf.disgenet.org/sparql/",
-      "param": [
-
-      ]
-    },
-    {
-      "name": "uniprot2disease_none",
-      "title": "Get diseases associated with given UniProt IDs",
-      "uri": "http://localhost:7070/api/disgenet/uniprot2disease_none",
-      "endpoint": "http://rdf.disgenet.org/sparql/",
-      "param": [
-
-      ]
-    }
-  ],
-  "general": [
-    {
-      "name": "find_term_uri",
-      "title": "Find classes or properties (regex search for URIs or labels)",
-      "uri": "http://localhost:7070/api/general/find_term_uri",
-      "endpoint": "http://dbpedia.org/sparql",
-      "param": [
-        {
-          "name": "arg1",
-          "default": "homolo"
-        }
-      ]
-    },
-    {
-      "name": "graphs_bug",
-      "title": "SELECT DISTINCT ?graph, instead of GROUP BY ?graph, returns less results (Virtuoso 7.1.0)",
-      "uri": "http://localhost:7070/api/general/graphs_bug",
-      "endpoint": "http://dbpedia.org/sparql",
-      "param": [
-
-      ]
-    },
-    {
-      "name": "label",
-      "title": "",
-      "uri": "http://localhost:7070/api/general/label",
-      "endpoint": "http://dbpedia.org/sparql",
-      "param": [
-
-      ]
-    },
-    {
-      "name": "link_select",
-      "title": "Links from a specific instance",
-      "uri": "http://localhost:7070/api/general/link_select",
-      "endpoint": "http://dbpedia.org/sparql",
-      "param": [
-
-      ]
-    },
-    {
-      "name": "regex_uri",
-      "title": "Regex search for URIs (subjects of triples)",
-      "uri": "http://localhost:7070/api/general/regex_uri",
-      "endpoint": "http://dbpedia.org/sparql",
-      "param": [
-
-      ]
-    },
-    {
-      "name": "search_for_class",
-      "title": "Free text search in Virtuoso",
-      "uri": "http://localhost:7070/api/general/search_for_class",
-      "endpoint": "http://dbpedia.org/sparql",
-      "param": [
-
-      ]
-    },
-    {
-      "name": "search_label_for_class",
-      "title": "Free text search in Virtuoso",
-      "uri": "http://localhost:7070/api/general/search_label_for_class",
-      "endpoint": "http://dbpedia.org/sparql",
-      "param": [
-
-      ]
-    },
-    {
-      "name": "search_label_not_class",
-      "title": "Free text search in Virtuoso (count instances of each class)",
-      "uri": "http://localhost:7070/api/general/search_label_not_class",
-      "endpoint": "http://dbpedia.org/sparql",
-      "param": [
-
-      ]
-    }
+    ...
   ]
 }
 
@@ -642,7 +496,6 @@ SPARQL queries can be executed in Web site.
 
 
 %%%%%%%%%%%%%%%%%%%%
-\section{Use cases}
 
 % \subsection{Simple querying with SPARQL shortcuts}
 
@@ -665,33 +518,6 @@ SPARQL queries can be executed in Web site.
 % \noindent where predicate {\tt up:otherName} is specified to further confine the results to other names. 
 % For the full list of available command-line options, simply type the command {\tt spang}.
 
-
-\subsection{Using SPARQL templates with parameters}
-
-Although SPARQL shortcuts are useful for simple querying with typical query patterns, they do not cover various
-queries with complicated patterns. 
-Thus, SPANG provides a mechanism to accept SPARQL templates to generate arbitrary query patterns. 
-An example query is: 
-
-\texttt{spang uniprot taxtree\_ancestor 511145 -ac}
-
-\noindent where the first argument is the target SPARQL endpoint and the following arguments are SPARQL templates and parameters. {\tt taxtree\_ancestor} is the name of a SPARQL template included in the predefined SPARQL library (see supplementary data for the code), {\tt 511145} is the parameter, {\tt -a} is the option for abbreviating results, and {\tt -c} is for aligning output columns for easier reading.
-The specified parameter replaces the placeholder included in the template before execution. 
-This example query traverses the NCBI taxonomy tree from the given ID (511145) to the root node and outputs scientific names in each taxonomic rank.
-
-
-Available SPARQL templates are not limited to the local library.
-If SPARQL libraries are published on the Web, the users can call the templates by means of URIs across the Web.
-An example usage of the Microbial Genome Database (MBGD) SPARQL library published at http://mbgd.genome.ad.jp/sparql/library/ is as follows.
-
-\texttt{spang mbgd mbgdl:get\_ortholog K9Z723}
-
-where {\tt mbgd} is the MBGD SPARQL endpoint \citep{Chiba} and \texttt{mbgdl:} is a prefix for abbreviating the URI of the template {\tt get\_ortholog} in the MBGD SPARQL library (see supplementary data for the code). 
-The template can be specified in the full URI or in abbreviated form using the predefined prefix declarations.
-This example query searches the MBGD database \citep{Uchiyama} for the orthologs of a protein \texttt{K9Z723} (Photosystem II lipoprotein Psb27).
-
-The following example command line gives a parameter to the query template, and execute to the DisGeNet endpoint.
-\texttt{spang gene\_disease.rq --param disease=C0751955}
 
 
 % \subsection{Combinatorial execution of multiple queries}
@@ -772,11 +598,9 @@ A simple example is:
 \noindent where the first argument is the target SPARQL endpoint and the following arguments are SPARQL shortcuts (the SPARQL endpoint can be specified in a URL or nickname for simplicity). 
 \texttt{uniprot} is a nickname for the UniProt SPARQL endpoint \citep{UniProt} and \texttt{tax:} is a prefix for URIs of NCBI taxonomy IDs. 
 This example command line searches the target database for statements that have taxonomy ID 511145 ({\it Escherichia coli} strain K-12 MG1655) as a subject. Using the \texttt{-a} option transforms the URIs in the
- search result into abbreviated forms using predefined prefix declarations. For example,
- 
- \texttt{\textless http://www.w3.org/2000/01/rdf-schema\#subClassOf\textgreater} 
- 
-\noindent is transformed into \texttt{rdfs:subClassOf
+ search result into abbreviated forms using predefined prefix declarations. For example,\\
+\texttt{\textless http://www.w3.org/2000/01/rdf-schema\#subClassOf\textgreater} 
+is transformed into \texttt{rdfs:subClassOf
 }.
 The result is output to the standard output in the form of tab-separated values by default, as it is suitable for processing by line-oriented Unix programs.
 In addition, combination of subject, predicate, and object is possible according to the following.
@@ -786,6 +610,38 @@ In addition, combination of subject, predicate, and object is possible according
 \noindent where predicate {\tt up:otherName} is specified to further confine the results to other names. 
 For the full list of available command-line options, simply type the command {\tt spang}.
 \vspace*{-5pt}
+
+
+
+
+\subsection{Using SPARQL templates with parameters}
+
+Although SPARQL shortcuts are useful for simple querying with typical query patterns, they do not cover various
+queries with complicated patterns. 
+Thus, SPANG provides a mechanism to accept SPARQL templates to generate arbitrary query patterns. 
+An example query is: 
+
+\texttt{spang uniprot taxtree\_ancestor 511145 -ac}
+
+\noindent where the first argument is the target SPARQL endpoint and the following arguments are SPARQL templates and parameters. {\tt taxtree\_ancestor} is the name of a SPARQL template included in the predefined SPARQL library (see supplementary data for the code), {\tt 511145} is the parameter, {\tt -a} is the option for abbreviating results, and {\tt -c} is for aligning output columns for easier reading.
+The specified parameter replaces the placeholder included in the template before execution. 
+This example query traverses the NCBI taxonomy tree from the given ID (511145) to the root node and outputs scientific names in each taxonomic rank.
+
+
+Available SPARQL templates are not limited to the local library.
+If SPARQL libraries are published on the Web, the users can call the templates by means of URIs across the Web.
+An example usage of the Microbial Genome Database (MBGD) SPARQL library published at http://mbgd.genome.ad.jp/sparql/library/ is as follows.
+
+\texttt{spang mbgd mbgdl:get\_ortholog K9Z723}
+
+where {\tt mbgd} is the MBGD SPARQL endpoint \citep{Chiba} and \texttt{mbgdl:} is a prefix for abbreviating the URI of the template {\tt get\_ortholog} in the MBGD SPARQL library (see supplementary data for the code). 
+The template can be specified in the full URI or in abbreviated form using the predefined prefix declarations.
+This example query searches the MBGD database \citep{Uchiyama} for the orthologs of a protein \texttt{K9Z723} (Photosystem II lipoprotein Psb27).
+
+The following example command line gives a parameter to the query template, and execute to the DisGeNet endpoint.
+\texttt{spang gene\_disease.rq --param disease=C0751955}
+
+
 
 
 \subsection{Combinatorial execution of multiple queries}
