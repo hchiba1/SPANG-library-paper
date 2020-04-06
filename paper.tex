@@ -15,7 +15,7 @@
 
 \begin{document}
 %
-\title{SPANG library: a controlled query set for FAIR SPARQL}
+\title{SPANG: a controlled query set with the FAIR principle}
 %
 \titlerunning{SPANG library}
 % If the paper title is too long for the running head, you can set
@@ -44,15 +44,21 @@
 %
 \begin{abstract}
 %The abstract should briefly summarize the contents of the paper in 15--250 words.
-How can we maximize the value of accumulated SPARQL queries? An increasing number of datasets have been published in the Resource Description Framework (RDF) and the SPARQL standard allows interoperable framework for querying the RDF datasets; however, reuse of SPARQL queries remains in a limited level. The problem is the lack of findability, accessibility and reusability of SPARQL queries that were once written. Given that SPARQL is an important framework of the Semantic Web, it is important to consolidate the eco-system to reuse SPARQL queries written in various project.
-Here, we present a extended specification for storing and distributing SPARQL queries named SPANG, and provide a pilot study of SPANG library.
-These features facilitate easy access to RDF datasets by users. 
-We present a metadata set for annotating a SPARQL query.
+How can we maximize the value of accumulated SPARQL queries? An increasing number of datasets have been published in the Resource Description Framework (RDF) and the SPARQL standard allows interoperable framework for querying the RDF datasets; however, reuse of SPARQL queries remains in a limited level. The problem is the lack of findability, accessibility and reusability of SPARQL queries that were once written. 
+%Given that SPARQL is an important framework of the Semantic Web, it is important to consolidate the eco-system to reuse SPARQL queries written in various project.
+%Here, we present a extended specification for storing and distributing SPARQL queries named SPANG, and provide a pilot study of SPANG library.
+Here we propose a SPARQL extention to construct a reusable query library to enrich the Semantic Web platform.
+As a use case, we constructed a reusable SPARQL query library, named SPANG library.
+Specifically, We challenged the issue of findability and accessibility of SPARQL queries.
+This specification leads to the construction of eco-system to reuse SPARQL queries to enrich the use of the Semantic Web platform.
+% These features facilitate easy access to RDF datasets by users. 
+Our contributions are as follows.
+1) We present a metadata set for annotating a SPARQL query.
 It enables to identify SPARQL query, and provides useful information fo the query.
-We also present a mechanism to parameterize the SPARQL query.
+2) We also present a mechanism to parameterize the SPARQL query.
 It make each query reusable in different settings.
 Further, the mechanism enables federated queries by combining multiple queries through Unix pipe. 
-Here, we developed spang command, as a client that helps users to generate queries. SPANG can create typical short queries according to the arguments specified by users like a \textit{one-liner} style in the Unix command line. It can also call SPARQL template libraries constructed in a local file system or published on the Web. 
+% Here, we developed spang command, as a client that helps users to generate queries. SPANG can create typical short queries according to the arguments specified by users like a \textit{one-liner} style in the Unix command line. It can also call SPARQL template libraries constructed in a local file system or published on the Web. 
 This study make SPARQL queries more findable, accessible, interoperable, and reusable, i.e., pushing forward FAIR SPARQL.
 SPANG is freely available at \url{https://spang.dbcls.jp}.
 \keywords{SPARQL query \and RDF store \and template library.}
@@ -111,6 +117,33 @@ we constructed controlled SPARQL queries for available SPARQL endpoints.
 
 
 The following section includes: overview of the SPANG project, specification of SPANG templates, implementation of the SPANG library, and use case of SPANSG library.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Overview}
+Here we overview the structure of this paper.
+
+\subsection{SPARQL metadata}
+
+We propose a set of SPARQL metadata to annotate each SPARQL query, to make them more reusable.
+Those metadata are added as comment at the head of the SPARQL query, thus that does not violate the SPARQL specification. 
+The set of metadata increase the findability of SPARQL queries.
+
+As a use case, we developed a SPANG API to search for the set of SPARQL queries.
+
+\subsection{SPARQL parameterization}
+
+We propose the parapeterization mechanism of SPARQL query. It is crucial to reuse the SPARQL query for us to improve the productivity of the programming experiance on the Semantic Web platform.
+
+Using SPANG API, users can execute SPARQL query over the Web, with the given parameters.
+
+\subsection{SPANG library}
+
+According to the metadata and parameterization mechanism, we can construct a controlled set of SPARQL library which is reusable in various settings.
+
+\subsection{SPANG command}
+
+As an interface the the SPANG library, we constructed a command-line interface.
 
 %%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -650,10 +683,9 @@ This example query traverses the NCBI taxonomy tree from the given ID (511145) t
 Available SPARQL templates are not limited to the local library.
 If SPARQL libraries are published on the Web, the users can call the templates by means of URIs across the Web.
 An example usage of the Microbial Genome Database (MBGD) SPARQL library published at http://mbgd.genome.ad.jp/sparql/library/ is as follows.
-\begin{quoting}
+
 \texttt{spang mbgd mbgdl:get\_ortholog K9Z723}
-\vspace{1pt}
-\end{quoting}
+
 where {\tt mbgd} is the MBGD SPARQL endpoint \citep{Chiba} and \texttt{mbgdl:} is a prefix for abbreviating the URI of the template {\tt get\_ortholog} in the MBGD SPARQL library (see supplementary data for the code). 
 The template can be specified in the full URI or in abbreviated form using the predefined prefix declarations.
 This example query searches the MBGD database \citep{Uchiyama} for the orthologs of a protein \texttt{K9Z723} (Photosystem II lipoprotein Psb27).
@@ -728,6 +760,51 @@ Options:
 \subsection{SPANG portal web site}
 SPANG portal web site is developed using Ruby on Rails. And it can be run on Docker. The SPANG query library is published on GitHub. Thus, users can run a portal site by their own.
 
+
+\subsection{Simple querying with SPARQL shortcuts}
+
+Specific command-line options, including \texttt{-S~\textit{SUBJECT}}, \texttt{-P~\textit{PREDICATE}}, \texttt{-O~\textit{OBJECT}}, \texttt{-L~\textit{LIMIT}}, and other modifiers, 
+are interpreted as shortcuts for generating typical SPARQL queries. 
+A simple example is: 
+
+\texttt{spang uniprot -S tax:511145 -a}
+
+\noindent where the first argument is the target SPARQL endpoint and the following arguments are SPARQL shortcuts (the SPARQL endpoint can be specified in a URL or nickname for simplicity). 
+\texttt{uniprot} is a nickname for the UniProt SPARQL endpoint \citep{UniProt} and \texttt{tax:} is a prefix for URIs of NCBI taxonomy IDs. 
+This example command line searches the target database for statements that have taxonomy ID 511145 ({\it Escherichia coli} strain K-12 MG1655) as a subject. Using the \texttt{-a} option transforms the URIs in the
+ search result into abbreviated forms using predefined prefix declarations. For example,
+ 
+ \texttt{\textless http://www.w3.org/2000/01/rdf-schema\#subClassOf\textgreater} 
+ 
+\noindent is transformed into \texttt{rdfs:subClassOf
+}.
+The result is output to the standard output in the form of tab-separated values by default, as it is suitable for processing by line-oriented Unix programs.
+In addition, combination of subject, predicate, and object is possible according to the following.
+
+\texttt{spang uniprot -S tax:511145 -P up:otherName}
+
+\noindent where predicate {\tt up:otherName} is specified to further confine the results to other names. 
+For the full list of available command-line options, simply type the command {\tt spang}.
+\vspace*{-5pt}
+
+
+\subsection{Combinatorial execution of multiple queries}
+
+SPANG combines multiple queries through a Unix pipe. 
+Combining a {\tt spang} command in shortcut mode and another one in template mode is also possible.
+An example of such a combinatorial query is shown in Fig.~\ref{fig:01}.
+The first {\tt spang} command is in template mode, which is the same as that presented in the Section 2.3. 
+This command searches the MBGD database for orthologs of a protein {\tt K9Z723}. 
+The obtained list of proteins are used in the second query, which searches the UniProt database for annotations of the given list of proteins. 
+The option \texttt{-S 1} specifies the values from the first column of the standard input as subject.
+This combinatorial query enables integrative use of two databases distributed across the Web. 
+Here, the output of the first command can be further modified by altering the second command.
+For example:
+\begin{quoting}
+\texttt{spang mbgd mbgdl:get\_ortholog K9Z723 | spang uniprot uniprot\_xref PDB}
+\vspace{1pt}
+\end{quoting}
+where {\tt uniprot\_xref} is a SPARQL template (see supplementary data for the code), which retrieves cross-references from the UniProt IDs given in the standard input to the database specified as the parameter (in this example, {\tt PDB}). This example command line searches for entries in the Protein Data Bank (PDB) \citep{Berman} among orthologs of {\tt K9Z723}.
 
 
 
