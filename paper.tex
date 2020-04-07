@@ -15,7 +15,7 @@
 
 \begin{document}
 %
-\title{SPANG: constructing a controlled set of queries with the FAIR principle}
+\title{SPANG: constructing a controlled set of SPARQL queries with the FAIR principle}
 %
 \titlerunning{SPANG library}
 % If the paper title is too long for the running head, you can set
@@ -44,15 +44,14 @@
 %
 \begin{abstract}
 %The abstract should briefly summarize the contents of the paper in 15--250 words.
-How can we maximize the value of accumulated SPARQL queries? An increasing number of datasets have been published in the Resource Description Framework (RDF) and the SPARQL standard allows interoperable framework for querying the RDF datasets; however, reuse of SPARQL queries remains in a limited level. The problem is the lack of findability, accessibility and reusability of SPARQL queries that were once written. 
+How can we maximize the value of accumulated SPARQL queries? An increasing number of datasets have been published in the Resource Description Framework (RDF) and the SPARQL standard allows interoperable framework for querying the RDF datasets; however, reuse of SPARQL queries remains limited due to the lack of findability, accessibility and reusability of SPARQL queries that were once written. 
 %Given that SPARQL is an important framework of the Semantic Web, it is important to consolidate the eco-system to reuse SPARQL queries written in various project.
 %Here, we present a extended specification for storing and distributing SPARQL queries named SPANG, and provide a pilot study of SPANG library.
 Here we propose a SPARQL extention to construct a reusable query library to enrich the Semantic Web platform.
 As a use case, we constructed a reusable SPARQL query library, named SPANG library.
-Specifically, We challenged the issue of findability and accessibility of SPARQL queries.
-This specification leads to the construction of eco-system to reuse SPARQL queries to enrich the use of the Semantic Web platform.
+Our contribution is the improvement of findability and accessibility of SPARQL queries.
 % These features facilitate easy access to RDF datasets by users. 
-Our contributions are as follows.
+More specifically,
 1) We present a metadata set for annotating a SPARQL query.
 It enables to identify SPARQL query, and provides useful information fo the query.
 2) We also present a mechanism to parameterize the SPARQL query.
@@ -60,28 +59,38 @@ It make each query reusable in different settings.
 Further, the mechanism enables federated queries by combining multiple queries through Unix pipe. 
 % Here, we developed spang command, as a client that helps users to generate queries. SPANG can create typical short queries according to the arguments specified by users like a \textit{one-liner} style in the Unix command line. It can also call SPARQL template libraries constructed in a local file system or published on the Web. 
 This study make SPARQL queries more findable, accessible, interoperable, and reusable, i.e., pushing forward FAIR SPARQL.
-SPANG is freely available at \url{https://spang.dbcls.jp}.
+This specification leads to the construction of eco-system to reuse SPARQL queries to enrich the use of the Semantic Web platform.
+SPANG project resources is available at \url{https://spang.dbcls.jp}.
 \keywords{SPARQL query \and RDF store \and template library.}
 \end{abstract}
 %
 %
 %
 \section{Introduction}
-An increasing number of datasets have been published in the Resource Description Framework (RDF). 
-Although the SPARQL language provides a basis for exploiting RDF databases, writing a raw SPARQL code often becomes a burden for users. 
+
+An increasing number of datasets have been published in the Resource Description Framework (RDF).
+SPARQL is the standardized query langage, and many Semantic Web users write queries in SPARQL, with a great amount of efforts.
+Those queries are valuable resource.
+However, due to the limitation of SPARQL specifications, the reuse of those queries are limited. How can we maximize the value of accumulated SPARQL queries?
+%Although the SPARQL language provides a basis for exploiting RDF databases, writing a raw SPARQL code often becomes a burden for users. 
 % Several approaches for support of SPARQL writing exist. One is to develop SPARQL editors that have useful functionalities 
 % such as URI autocompletion~\cite{Rietveld}.
 % Another aims at automatic generation of SPARQL queries~\cite{Yamaguchi}.
 % Despite the efforts of previous studies, Semantic Web users remain bound to the task of SPARQL coding.
-Here, we developed SPANG, a novel SPARQL client
-that addresses this issue of SPARQL coding by simple query generation and reusing existing query templates.
-SPANG
+%Here, we developed SPANG, a novel SPARQL client
+%that addresses this issue of SPARQL coding by simple query generation and reusing existing query templates.
+%SPANG
 %, with its unique features, 
-minimizes the burden of coding SPARQL,
-thereby enhancing integrative analysis of distributed RDF databases. 
-
+%minimizes the burden of coding SPARQL,
+%thereby enhancing integrative analysis of distributed RDF databases. 
 
 SPARQL is a fundamental technology for querying RDF data. However, is is not designed for reusability. In data management guideline, FAIR principle is well known~\cite{fair}. Findability, Accesibility, Reusablility should be addressed, to make the most of SPARQL queries as resources. 
+
+One of the key principle in the Semantic Web is the FAIR principle: findable, accessible, interoperable and reusable.
+Interestingly, the FAIR principle can be applied not only to the RDF data, but also other resource, like software.
+As the SPARQL queries are important component of the Semantic Web community,
+they should be shared in a solid principle.
+The FAIR principle is suitable for this aim.
 
 The Semantic Web is comprised of various specifications, including RDF~\cite{rdf}, OWL~\cite{owl}, and SPARQL~\cite{sparql}. The ontologies written in OWL are accumulated and shared on repositories~\cite{bioportal}.
 RDF datasets are also accumulated and hosted in portal web sites~\cite{rdf-portal}.
@@ -96,7 +105,22 @@ How about findability? In many Semantic Web projects, SPARQL queries are written
 
 Here, we decided to follow the FAIR principle and extend the SPARQL specifications for more efficient development of the Semantic Web.
 
+Semantic Web users often write SPARQL queris.
+However, the SPARQL lacks the parameterization mechanism, thus, users write queries for their specific use cases.
+But good SPARQL queries can be reused.
+Actually, writing good query requires much efforts, thus, they should be reused to improve the productivity.
+Thus, considering the reusability of SPARQL queries are crucial to enrich the Semantic Web community.
+How can we improve the reusability of SPARQL?
 
+One of the key to improve the reusability of queries is parameterization.
+Parameterization make the query more reusable.
+Using the template query with parameters, the same query can be applied to many use cases.
+There can be several types of parameterization.
+The SPARQL variables can be considered as parameter.
+In that case, values to the parameters can replace them.
+On the other hands, part of the URI or literals can be parameterized.
+In that case also, values to the parameters can replace them.
+Another mechanism to use template is to give binding to the variables.
 
 The SPANG package includes the main {\tt spang} command, which can be used in the Unix command-line environment.
 In general, the {\tt spang} command help users query RDF databases by dynamically generating SPARQL queries according to the command-line options or arguments. 
@@ -668,8 +692,18 @@ where {\tt uniprot\_xref} is a SPARQL template (see supplementary data for the c
 
 SPARQL tempalting mechanisms have been implemented in various projects. Based on the templating mechanisms, SPARQL libraries have been implemented, such as Bioqueries. SPARQList is a framework to store SPRARQL templates to be used through API.
 
-As a SPARQL parser, SPARQL.js is available.
+As a SPARQL formatter, some software are available.
+rdfstore-js\cite{rdfstore-js} has SPARQL parser, but does not have formatter.
+SPARQL.js~\cite{sparql-js} implements parser and formatter. However, there are no formatting rule explicitly defined.
+Jena package~\cite{jena} includes parser and formatter. However, it does not define formatting rule.
 
+Bioqueries~\cite{bioqueries} have tried to collect SPARQL queries as community effort. It increase the findability and reusability.
+However, the query can only be executed on the web site.
+Users should copy and paste the queries into their own software.
+In contrast, we tried to build a software network on top of the Semantic Web platform.
+
+Client for calling parameterized queries is still limited.
+ASQC~\cite{asqc} command enables the execution of parameterized queries or queries with given variable bindings. However, it is still not possible to execute the quries publised online across the Web.
 
 \section{Conclusion}
 SPANG enables easy generation of typical queries, thereby reducing the burden of writing SPARQL. SPANG also provides a framework for reusing and sharing arbitrary queries across the Web. Moreover, it enables users to execute complex queries by combining existing query templates. SPANG, with these unique features, facilitates integrative exploitation of published RDF datasets and supports knowledge discovery. 
@@ -798,6 +832,9 @@ OWL 2 Web Ontology Language
 \bibitem{spang}
 Chiba, H., & Uchiyama, I. (2017). SPANG: a SPARQL client supporting generation and reuse of queries for distributed RDF databases. BMC bioinformatics, 18(1), 93.
 
+\bibitem{bioqueries}
+García-Godoy, M. J., Navas-Delgado, I., & Aldana-Montes, J. (2011, December). Bioqueries: a social community sharing experiences while querying biological linked data. In Proceedings of the 4th international workshop on semantic web applications and tools for the life sciences (pp. 24-31).
+
 \bibitem{umaka}
 Yamamoto, Y., Yamaguchi, A., & Splendiani, A. (2018). YummyData: providing high-quality open life science data. Database, 2018.
 
@@ -808,15 +845,33 @@ Wilkinson, M. D., Dumontier, M., Aalbersberg, I. J., Appleton, G., Axton, M., Ba
 sparql-doc: Generate HTML documentation from SPARQL queries.
 \url{https://github.com/ldodds/sparql-doc}
 
+\bibitem{rdfstore-js}
+Hernández, A. G., & GARCıA, M. N. M. (2012). A JavaScript RDF store and application library for linked data client applications. In Devtracks of the, WWW2012, conference. Lyon, France.
+
+\bibitem{sparql-js}
+SPARQL.js – A SPARQL 1.1 parser for JavaScript
+\url{https://github.com/RubenVerborgh/SPARQL.js}
+
+\bibitem{jena}
+Grobe, M. (2009, October). Rdf, jena, sparql and the'semantic web'. In Proceedings of the 37th annual ACM SIGUCCS fall conference: communication and collaboration (pp. 131-138).
+
 \bibitem{spin}
 SPIN: SPARQL Inferencing Notation.
 \url{https://spinrdf.org/}
+
+\bibitem{sparql12}
+SPARQL 1.2 Community Group
+\url{https://github.com/w3c/sparql-12}
 
 \bibitem{rdf-portal}
 Kawashima, S., Katayama, T., Hatanaka, H., Kushida, T., & Takagi, T. (2018). NBDC RDF portal: a comprehensive repository for semantic data in life sciences. Database, 2018.
 
 \bibitem{bioportal}
 Salvadores, M., Alexander, P. R., Musen, M. A., & Noy, N. F. (2013). BioPortal as a dataset of linked biomedical ontologies and terminologies in RDF. Semantic web, 4(3), 277-284.
+
+\bibitem{asqc}
+ASQC provides a simple command-line SPARQL query client.
+\url{https://github.com/gklyne/asqc}
 
 % \bibitem{ref_article1}
 % Author, F.: Article title. Journal \textbf{2}(5), 99--110 (2016)
