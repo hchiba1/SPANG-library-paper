@@ -126,7 +126,7 @@ Figure~\ref{fig:spang_top} is the top page of SPANG, which includes links to Git
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%
-\section{Making SPARQL queries FAIR}
+\section{Making SPARQL Queries FAIR}
 %%%%%%%%%%%%%%%%%%%%%%%%
 
 The FAIR guiding principle aims to enhance the Findability, Accessibility, Interoperability and Reusability of digital resources.
@@ -473,16 +473,10 @@ We developed a reformatter of the SPARQL code as described below.
 
 %%%%%%%%%%%%%%%%%%%%%%
 \section{Availability}
-
-\subsection{SPANG server}
-SPARQL queries can be executed in Web site.
-SPANG server is developed using Ruby on Rails. And it can be run on Docker. The SPANG query library is published on GitHub. Thus, users can run a portal site by their own.
-
-\subsection{SPANG APIs}
-SPANG library API and query API are developed in Ruby on Rails. The docker version of the SPANG includes the Ruby on Rails implementation of the SPANG APIs.
+%%%%%%%%%%%%%%%%%%%%%%
 
 
-\subsection{JavaScript}
+\subsection{JavaScript Application}
 SPANG is now implemented in JavaScript, so the SPARQL queries can be executed in JavaScript code across the internet. To avid CORS retriction, it can access CDN services such as jsDelivr~\cite{jsdelivr} as shown in Figure~\ref{fig:jsdelivr}.
 
 
@@ -502,63 +496,107 @@ result = spang.query(template, 'https://sparql.uniprot.org', { abbr: true, forma
 \end{figure}
 
 
-\subsection{Command-line client}
+\subsection{Command-line Client}
 As an interface the the SPANG library, we constructed a command-line interface.
-
 Originally, SPANG was developed as a command line client using Perl language~\cite{spang}.
-It is re-implemented in JavaScript using Node.js.
+It is re-implemented in JavaScript using Node.js as SPANG2.
 SPARQL templates can be executed in command line.
+The following example command line gives a parameter to the query template, and execute to the DisGeNet endpoint
+
+\texttt{spang2 gene\_disease.rq --param disease=C0751955}
+
+The template can be URL that returns a SPARQL query. The full usages of the command is as shown in Figure~\ref{fig:spang-command}.
 
 
-\subsubsection{Calling libraries}
+\begin{figure}[!t]
+\begin{scriptsize}
+\begin{verbatim}
+Usage: spang2 [options] <SPARQL_TEMPLATE>
 
-Although SPARQL shortcuts are useful for simple querying with typical query patterns, they do not cover various
-queries with complicated patterns. 
-Thus, SPANG provides a mechanism to accept SPARQL templates to generate arbitrary query patterns. 
-An example query is: 
+Options:
+  -e, --endpoint <ENDPOINT>    target SPARQL endpoint
+  -p, --param <PARAMS>         parameters to be embedded (in the form of "--param par1=val1,par2=val2,...")
+  -o, --outfmt <FORMAT>        tsv, json, n-triples (nt), turtle (ttl), rdf/xml (rdfxml), n3, xml, html
+  -a, --abbr                   abbreviate results using predefined prefixes
+  -v, --vars                   variable names are included in output (in the case of tsv format)
+  -S, --subject <SUBJECT>      shortcut to specify subject
+  -P, --predicate <PREDICATE>  shortcut to specify predicate
+  -O, --object <OBJECT>        shortcut to specify object
+  -L, --limit <LIMIT>          LIMIT output (use alone or with -[SPOF])
+  -F, --from <FROM>            shortcut to search FROM specific graph (use alone or with -[SPOLN])
+  -N, --number                 shortcut to COUNT results (use alone or with -[SPO])
+  -G, --graph                  shortcut to search for graph names (use alone or with -[SPO])
+  -r, --prefix <PREFIX_FILES>  read prefix declarations (default: SPANG_DIR/etc/prefix,~/.spang/prefix)
+  -n, --ignore                 ignore user-specific file (~/.spang/prefix) for test purpose
+  -m, --method <METHOD>        GET or POST (default: "GET")
+  -q, --show_query             show query and quit
+  -f, --fmt                    format the query
+  -i, --indent <DEPTH>         indent depth; use with --fmt (default: 2)
+  -l, --list_nick_name         list up available nicknames of endpoints and quit
+  -d, --debug                  debug (output query embedded in URL, or output AST with --fmt)
+  -V, --version                output the version number
+  -h, --help                   output usage information
 
-\texttt{spang uniprot taxtree\_ancestor 511145 -ac}
-
-\noindent where the first argument is the target SPARQL endpoint and the following arguments are SPARQL templates and parameters. {\tt taxtree\_ancestor} is the name of a SPARQL template included in the predefined SPARQL library (see supplementary data for the code), {\tt 511145} is the parameter, {\tt -a} is the option for abbreviating results, and {\tt -c} is for aligning output columns for easier reading.
-The specified parameter replaces the placeholder included in the template before execution. 
-This example query traverses the NCBI taxonomy tree from the given ID (511145) to the root node and outputs scientific names in each taxonomic rank.
-
-
-Available SPARQL templates are not limited to the local library.
-If SPARQL libraries are published on the Web, the users can call the templates by means of URIs across the Web.
-An example usage of the Microbial Genome Database (MBGD) SPARQL library published at http://mbgd.genome.ad.jp/sparql/library/ is as follows.
-
-\texttt{spang mbgd mbgdl:get\_ortholog K9Z723}
-
-where {\tt mbgd} is the MBGD SPARQL endpoint \citep{Chiba} and \texttt{mbgdl:} is a prefix for abbreviating the URI of the template {\tt get\_ortholog} in the MBGD SPARQL library (see supplementary data for the code). 
-The template can be specified in the full URI or in abbreviated form using the predefined prefix declarations.
-This example query searches the MBGD database \citep{Uchiyama} for the orthologs of a protein \texttt{K9Z723} (Photosystem II lipoprotein Psb27).
-
-The following example command line gives a parameter to the query template, and execute to the DisGeNet endpoint.
-\texttt{spang gene\_disease.rq --param disease=C0751955}
-
-
-\subsubsection{Combinatorial execution}
-
-SPANG combines multiple queries through a Unix pipe. 
-Combining a {\tt spang} command in shortcut mode and another one in template mode is also possible.
-An example of such a combinatorial query is shown in Fig.~\ref{fig:01}.
-The first {\tt spang} command is in template mode, which is the same as that presented in the Section 2.3. 
-This command searches the MBGD database for orthologs of a protein {\tt K9Z723}. 
-The obtained list of proteins are used in the second query, which searches the UniProt database for annotations of the given list of proteins. 
-The option \texttt{-S 1} specifies the values from the first column of the standard input as subject.
-This combinatorial query enables integrative use of two databases distributed across the Web. 
-Here, the output of the first command can be further modified by altering the second command.
-For example:
-\begin{quoting}
-\texttt{spang mbgd mbgdl:get\_ortholog K9Z723 | spang uniprot uniprot\_xref PDB}
-\vspace{1pt}
-\end{quoting}
-where {\tt uniprot\_xref} is a SPARQL template (see supplementary data for the code), which retrieves cross-references from the UniProt IDs given in the standard input to the database specified as the parameter (in this example, {\tt PDB}). This example command line searches for entries in the Protein Data Bank (PDB) \citep{Berman} among orthologs of {\tt K9Z723}.
+\end{verbatim}
+\end{scriptsize}
+\caption{SPANG command usage}
+\label{fig:spang-command}
+\end{figure}
 
 
+\subsection{SPANG Server}
+SPARQL queries can be executed in Web site.
+SPANG server is developed using Ruby on Rails. And it can be run on Docker. The SPANG query library is published on GitHub. Thus, users can run a portal site by their own. The SPANG APIs are available on the SPANG server.
 
+
+% \subsubsection{Calling libraries}
+
+% Although SPARQL shortcuts are useful for simple querying with typical query patterns, they do not cover various
+% queries with complicated patterns. 
+% Thus, SPANG provides a mechanism to accept SPARQL templates to generate arbitrary query patterns. 
+% An example query is: 
+
+% \texttt{spang uniprot taxtree\_ancestor 511145 -ac}
+
+% \noindent where the first argument is the target SPARQL endpoint and the following arguments are SPARQL templates and parameters. {\tt taxtree\_ancestor} is the name of a SPARQL template included in the predefined SPARQL library (see supplementary data for the code), {\tt 511145} is the parameter, {\tt -a} is the option for abbreviating results, and {\tt -c} is for aligning output columns for easier reading.
+% The specified parameter replaces the placeholder included in the template before execution. 
+% This example query traverses the NCBI taxonomy tree from the given ID (511145) to the root node and outputs scientific names in each taxonomic rank.
+
+
+% Available SPARQL templates are not limited to the local library.
+% If SPARQL libraries are published on the Web, the users can call the templates by means of URIs across the Web.
+% An example usage of the Microbial Genome Database (MBGD) SPARQL library published at http://mbgd.genome.ad.jp/sparql/library/ is as follows.
+
+% \texttt{spang mbgd mbgdl:get\_ortholog K9Z723}
+
+% where {\tt mbgd} is the MBGD SPARQL endpoint \citep{Chiba} and \texttt{mbgdl:} is a prefix for abbreviating the URI of the template {\tt get\_ortholog} in the MBGD SPARQL library (see supplementary data for the code). 
+% The template can be specified in the full URI or in abbreviated form using the predefined prefix declarations.
+% This example query searches the MBGD database \citep{Uchiyama} for the orthologs of a protein \texttt{K9Z723} (Photosystem II lipoprotein Psb27).
+
+
+% \subsubsection{Combinatorial execution}
+
+% SPANG combines multiple queries through a Unix pipe. 
+% Combining a {\tt spang} command in shortcut mode and another one in template mode is also possible.
+% An example of such a combinatorial query is shown in Fig.~\ref{fig:01}.
+% The first {\tt spang} command is in template mode, which is the same as that presented in the Section 2.3. 
+% This command searches the MBGD database for orthologs of a protein {\tt K9Z723}. 
+% The obtained list of proteins are used in the second query, which searches the UniProt database for annotations of the given list of proteins. 
+% The option \texttt{-S 1} specifies the values from the first column of the standard input as subject.
+% This combinatorial query enables integrative use of two databases distributed across the Web. 
+% Here, the output of the first command can be further modified by altering the second command.
+% For example:
+% \begin{quoting}
+% \texttt{spang mbgd mbgdl:get\_ortholog K9Z723 | spang uniprot uniprot\_xref PDB}
+% \vspace{1pt}
+% \end{quoting}
+% where {\tt uniprot\_xref} is a SPARQL template (see supplementary data for the code), which retrieves cross-references from the UniProt IDs given in the standard input to the database specified as the parameter (in this example, {\tt PDB}). This example command line searches for entries in the Protein Data Bank (PDB) \citep{Berman} among orthologs of {\tt K9Z723}.
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%
 \section{Related Work}
+%%%%%%%%%%%%%%%%%%%%%%
 
 SPARQL tempalting mechanisms have been implemented in various projects. Based on the templating mechanisms, SPARQL libraries have been implemented, such as Bioqueries. SPARQList is a framework to store SPARQL templates to be used through API.
 
@@ -583,7 +621,11 @@ ASQC~\cite{asqc} command enables the execution of parameterized queries or queri
 
 To the best of our knowledge, this is the first study to consider the FAIRification process comprehensively and show the concrete process of the FAIRification of it.
 
-\section{Conclusion and future work}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Conclusion and Future Work}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 SPANG provides a framework for reusing and sharing arbitrary queries across the Web.
 Sharing not only data but also queries (i.e., means of interpreting data) on the Semantic Web platform will help the biological research community collaborate in knowledge integration and discovery.
 Toward the FAIRification of SPARQL, SPANG provides step toward the FAIRification of Semantic Web, not only in terms of 
