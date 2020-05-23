@@ -14,28 +14,11 @@
 % \renewcommand\UrlFont{\color{blue}\rmfamily}
 
 \begin{document}
-%
-\title{SPANG Library: Making SPARQL Queries FAIR}
-%
-\titlerunning{SPANG library: making SPARQL FAIR}
-% If the paper title is too long for the running head, you can set
-% an abbreviated paper title here
-%
-%\author{First Author\inst{1}\orcidID{0000-1111-2222-3333} \and
-%Second Author\inst{2,3}\orcidID{1111-2222-3333-4444} \and
-%Third Author\inst{3}\orcidID{2222--3333-4444-5555}}
+
+\title{SPANG Template Library: Making SPARQL Queries FAIR}
+\titlerunning{SPANG: Making SPARQL Queries FAIR}
 \author{Hirokazu Chiba}
-%
 \authorrunning{H. Chiba}
-% First names are abbreviated in the running head.
-% If there are more than two authors, 'et al.' is used.
-%
-%\institute{Princeton University, Princeton NJ 08544, USA \and
-%Springer Heidelberg, Tiergartenstr. 17, 69121 Heidelberg, Germany
-%\email{lncs@springer.com}\\
-%\url{http://www.springer.com/gp/computer-science/lncs} \and
-%ABC Institute, Rupert-Karls-University Heidelberg, Heidelberg, Germany\\
-%\email{\{abc,lncs\}@uni-heidelberg.de}}
 \institute{Database Center for Life Science, Chiba 277-0871, Japan\\
 \email{chiba@dbcls.rois.ac.jp}
 }
@@ -65,12 +48,14 @@ This study make SPARQL queries FAIR, and this specification leads to the constru
 \keywords{SPARQL \and FAIR \and query library}
 
 \end{abstract}
-%
-%
-%
+
+
+%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}
+%%%%%%%%%%%%%%%%%%%%%%
+
 How can we maximize the value of accumulated SPARQL queries?
-Reuse of them of could be the key.
+Reuse of them is the key.
 An increasing number of datasets have been published in the Resource Description Framework (RDF).
 SPARQL is the standardized interface to RDF and contributing the reusability of the RDF data. 
 Although the SPARQL language provides a basis for exploiting RDF databases, writing a raw SPARQL code often becomes a burden for users. 
@@ -118,15 +103,26 @@ we constructed template engines for SPARQL queries.
 we constructed controlled SPARQL queries for available SPARQL endpoints.
 
 
-% The following section includes: overview of the SPANG project, specification of SPANG templates, implementation of the SPANG library, and use case of SPANSG library.
 
 
-% \begin{figure}
-% \center
-% \includegraphics[width=1.0\textwidth]{spang_top.png}
-% \caption{SPANG web site}
-% \label{fig:spang_top}
-% \end{figure}
+%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Overview}
+%%%%%%%%%%%%%%%%%%%%%%%%
+
+We overview the FAIR principles, then describe how to apply the principle to SPARQL.
+We demonstarate how to use the SPANG templete library.
+Then, we describe the details of SPANG template specifications.
+
+%The following section includes: overview of the SPANG project, specification of SPANG templates, implementation of the SPANG library, and use case of SPANSG library.
+
+Figure~\ref{fig:spang_top} is the top page of SPANG, which includes links to GitHub, Documentation, and SPANG library.
+
+\begin{figure}
+\center
+\includegraphics[width=1.0\textwidth]{spang_top.png}
+\caption{SPANG web site}
+\label{fig:spang_top}
+\end{figure}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%
@@ -307,7 +303,6 @@ The following command searches for queries with keywords.
 \subsection{SPANG portal}
 SPANG is originally developed for "SARQLing" the RDF dataset from command line. Here, we re-implemented the SPANG using Node.js and now the functionality is available through Web browser. 
 
-% Figure~\ref{fig:spang_top} is the top page of SPANG, which includes links to GitHub, Documentation, and SPANG library.
 
 Figure~\ref{fig:spang_lib} is the list of the target SPARQL endpoints. It also lists the SPARQL templates available in general for various endpoints.
 
@@ -448,12 +443,12 @@ A short name for the SPARQL template, descriptin of the query, and example param
 
 SPANG is implemented in JavaScript using the Node.js technology~\cite{nodejs}. Thus, it can be called in JavaScript applications, and also in the command-line environment.
 
-\subsection{SPANG template specification}
+\subsection{Template specifications}
 SPANG template syntax is an extension of sparql-doc. Although the sparql-doc aims at documentation of SPARQL originally, this notation is suitable for annotating each SPARQL query with metadata in the frame of SPARQL query. Each query can be still used as standard SPARQL query, and furthermore, if a parser for comment liens is implemented, users can obtain the metadata for the queries.
 Here, we consider the parameterization in this frame. We consider the parameters of the query as metadata of SPARQL.
 As a syntax parameterization, we consider mustash notation.
 
-\subsection{SPARQL template engine}
+\subsection{Template engine}
 SPANG template engine is implemented, where each template can be transformed into abstract syntax tree, and then reconstructed into SPARQL. 
 We used PEG~\cite{peg} expression of SPARQL grammar originally expressed in EBNF in the SPARQL specification. The original implementation of PEG.js~\cite{pegjs} of SPARQL grammar is provided by rdfstore-js project (https://github.com/antoniogarrote/rdfstore-js).
 The PEG.js code was modified to fit the use in the case of SPANG library.
@@ -461,10 +456,8 @@ The PEG.js is a parser generator, thus, we could generate our own parser based o
 
 We also developed a formatter to stringify the JSON object into string text. Thus, we can reformat the input SPARQL.
 
-\subsection{SPARQL template library}
-%We implemented SPARQL queries for 10 endpoints.
 
-\subsubsection{SPANG coding rules}
+\subsection{Coding rules}
 We defined a coding rule for SPARQL and its extension in SPANG framework. Coding rule is important for productivity of shared coding tasks and effective maintenance. It also helps to make debug process easier; weird look suggests possible bugs. 
 \begin{itemize}
     \item Header lines: query can start with header lines as comment lines. Metadata can be added at the top of the query as comment lines. Multiple lines are allowed. If multiple lines are described, they are written in sequential without blank lines. After the metadata lines, a blank line comes.
@@ -478,71 +471,16 @@ We defined a coding rule for SPARQL and its extension in SPANG framework. Coding
 We developed a reformatter of the SPARQL code as described below.
 
 
-\subsection{SPANG APIs}
-SPANG library API and query API are developed in Ruby on Rails. The docker version of the SPANG includes the Ruby on Rails implementation of the SPANG APIs.
-
-
-\subsection{SPANG command line client}
-As an interface the the SPANG library, we constructed a command-line interface.
-
-Originally, SPANG was developed as a command line client using Perl language~\cite{spang}.
-It is re-implemented in JavaScript using Node.js.
-SPARQL templates can be executed in command line.
-
-
-
-\subsection{SPANG Web site}
-SPARQL queries can be executed in Web site.
-
-
-%%%%%%%%%%%%%%%%%%%%
-
-% \subsection{Simple querying with SPARQL shortcuts}
-
-% Specific command-line options, including \texttt{-S~\textit{SUBJECT}}, \texttt{-P~\textit{PREDICATE}},\\ \texttt{-O~\textit{OBJECT}}, \texttt{-L~\textit{LIMIT}}, and other modifiers, 
-% are interpreted as shortcuts for generating typical SPARQL queries. 
-% A simple example is:
-
-% \texttt{spang uniprot -S tax:511145 -a}
-
-% \noindent where the first argument is the target SPARQL endpoint and the following arguments are SPARQL shortcuts (the SPARQL endpoint can be specified in a URL or nickname for simplicity). 
-% \texttt{uniprot} is a nickname for the UniProt SPARQL endpoint \cite{UniProt} and \texttt{tax:} is a prefix for URIs of NCBI taxonomy IDs. 
-% This example command line searches the target database for statements that have taxonomy ID 511145 ({\it Escherichia coli} strain K-12 MG1655) as a subject. Using the \texttt{-a} option transforms the URIs in the search result into abbreviated forms using predefined prefix declarations. For example,\\
-% \texttt{\textless http://www.w3.org/2000/01/rdf-schema\#subClassOf\textgreater}\\
-% is transformed into \texttt{rdfs:subClassOf}.
-% The result is output to the standard output in the form of tab-separated values by default, as it is suitable for processing by line-oriented Unix programs.
-% In addition, combination of subject, predicate, and object is possible according to the following.
-
-% \texttt{spang uniprot -S tax:511145 -P up:otherName}
-
-% \noindent where predicate {\tt up:otherName} is specified to further confine the results to other names. 
-% For the full list of available command-line options, simply type the command {\tt spang}.
-
-
-
-% \subsection{Combinatorial execution of multiple queries}
-
-% SPANG combines multiple queries through a Unix pipe. 
-% Combining a {\tt spang} command in shortcut mode and another one in template mode is also possible.
-% An example of such a combinatorial query is shown in Fig.~\ref{fig:01}.
-% The first {\tt spang} command is in template mode, which is the same as that presented in the Section 2.3. 
-% This command searches the MBGD database for orthologs of a protein {\tt K9Z723}. 
-% The obtained list of proteins are used in the second query, which searches the UniProt database for annotations of the given list of proteins. 
-% The option \texttt{-S 1} specifies the values from the first column of the standard input as subject.
-% This combinatorial query enables integrative use of two databases distributed across the Web. 
-% Here, the output of the first command can be further modified by altering the second command.
-% For example:
-% \begin{quoting}
-% \texttt{spang mbgd mbgdl:get\_ortholog K9Z723 | spang uniprot uniprot\_xref PDB}
-% \vspace{1pt}
-% \end{quoting}
-% where {\tt uniprot\_xref} is a SPARQL template (see supplementary data for the code), which retrieves cross-references from the UniProt IDs given in the standard input to the database specified as the parameter (in this example, {\tt PDB}). This example command line searches for entries in the Protein Data Bank (PDB) \citep{Berman} among orthologs of {\tt K9Z723}.
-
 %%%%%%%%%%%%%%%%%%%%%%
 \section{Availability}
 
-\subsection{SPANG portal web site}
-SPANG portal web site is developed using Ruby on Rails. And it can be run on Docker. The SPANG query library is published on GitHub. Thus, users can run a portal site by their own.
+\subsection{SPANG server}
+SPARQL queries can be executed in Web site.
+SPANG server is developed using Ruby on Rails. And it can be run on Docker. The SPANG query library is published on GitHub. Thus, users can run a portal site by their own.
+
+\subsection{SPANG APIs}
+SPANG library API and query API are developed in Ruby on Rails. The docker version of the SPANG includes the Ruby on Rails implementation of the SPANG APIs.
+
 
 \subsection{Using in JavaScript applications}
 SPANG is now implemented in JavaScript, so the SPARQL queries can be executed in JavaScript code across the internet. To avid CORS retriction, it can access CDN services such as jsDelivr~\cite{jsdelivr} as shown in Figure~\ref{fig:jsdelivr}.
@@ -564,31 +502,12 @@ result = spang.query(template, 'https://sparql.uniprot.org', { abbr: true, forma
 \end{figure}
 
 
-% \subsection{SPANG command: simple querying with shortcuts}
+\subsection{SPANG command line client}
+As an interface the the SPANG library, we constructed a command-line interface.
 
-% Specific command-line options, including \texttt{-S~\textit{SUBJECT}}, \texttt{-P~\textit{PREDICATE}}, \texttt{-O~\textit{OBJECT}}, \texttt{-L~\textit{LIMIT}}, and other modifiers, 
-% are interpreted as shortcuts for generating typical SPARQL queries. 
-% A simple example is: 
-
-% \texttt{spang uniprot -S tax:511145 -a}
-
-% \noindent where the first argument is the target SPARQL endpoint and the following arguments are SPARQL shortcuts (the SPARQL endpoint can be specified in a URL or nickname for simplicity). 
-% \texttt{uniprot} is a nickname for the UniProt SPARQL endpoint \citep{UniProt} and \texttt{tax:} is a prefix for URIs of NCBI taxonomy IDs. 
-% This example command line searches the target database for statements that have taxonomy ID 511145 ({\it Escherichia coli} strain K-12 MG1655) as a subject. Using the \texttt{-a} option transforms the URIs in the
-%  search result into abbreviated forms using predefined prefix declarations. For example,\\
-% \texttt{\textless http://www.w3.org/2000/01/rdf-schema\#subClassOf\textgreater} 
-% is transformed into \texttt{rdfs:subClassOf
-% }.
-% The result is output to the standard output in the form of tab-separated values by default, as it is suitable for processing by line-oriented Unix programs.
-% In addition, combination of subject, predicate, and object is possible according to the following.
-
-% \texttt{spang uniprot -S tax:511145 -P up:otherName}
-
-% \noindent where predicate {\tt up:otherName} is specified to further confine the results to other names. 
-% For the full list of available command-line options, simply type the command {\tt spang}.
-% \vspace*{-5pt}
-
-
+Originally, SPANG was developed as a command line client using Perl language~\cite{spang}.
+It is re-implemented in JavaScript using Node.js.
+SPARQL templates can be executed in command line.
 
 
 \subsection{SPANG command: calling libraries}
@@ -617,8 +536,6 @@ This example query searches the MBGD database \citep{Uchiyama} for the orthologs
 
 The following example command line gives a parameter to the query template, and execute to the DisGeNet endpoint.
 \texttt{spang gene\_disease.rq --param disease=C0751955}
-
-
 
 
 \subsection{SPANG command: combinatorial execution}
@@ -691,96 +608,8 @@ The SPANG API returns the result in JSON format. The JSON format can be mapped t
 We thank Shota Matsumoto for helping in implementation of SPANG.
 
 
-% \subsection{A Subsection Sample}
-% Please note that the first paragraph of a section or subsection is
-% not indented. The first paragraph that follows a table, figure,
-% equation etc. does not need an indent, either.
 
-% Subsequent paragraphs, however, are indented.
-
-% \subsubsection{Sample Heading (Third Level)} Only two levels of
-% headings should be numbered. Lower level headings remain unnumbered;
-% they are formatted as run-in headings.
-
-% \paragraph{Sample Heading (Fourth Level)}
-% The contribution should contain no more than four levels of
-% headings. Table~\ref{tab1} gives a summary of all heading levels.
-
-% \begin{table}
-% \caption{Table captions should be placed above the
-% tables.}\label{tab1}
-% \begin{tabular}{|l|l|l|}
-% \hline
-% Heading level &  Example & Font size and style\\
-% \hline
-% Title (centered) &  {\Large\bfseries Lecture Notes} & 14 point, bold\\
-% 1st-level heading &  {\large\bfseries 1 Introduction} & 12 point, bold\\
-% 2nd-level heading & {\bfseries 2.1 Printing Area} & 10 point, bold\\
-% 3rd-level heading & {\bfseries Run-in Heading in Bold.} Text follows & 10 point, bold\\
-% 4th-level heading & {\itshape Lowest Level Heading.} Text follows & 10 point, italic\\
-% \hline
-% \end{tabular}
-% \end{table}
-
-
-% \noindent Displayed equations are centered and set on a separate
-% line.
-% \begin{equation}
-% x + y = z
-% \end{equation}
-% Please try to avoid rasterized images for line-art diagrams and
-% schemas. Whenever possible, use vector graphics instead (see
-% Fig.~\ref{fig1}).
-
-% \begin{figure}
-% \includegraphics[width=\textwidth]{fig1.eps}
-% \caption{A figure caption is always placed below the illustration.
-% Please note that short captions are centered, while long ones are
-% justified by the macro package automatically.} \label{fig1}
-% \end{figure}
-
-% \begin{theorem}
-% This is a sample theorem. The run-in heading is set in bold, while
-% the following text appears in italics. Definitions, lemmas,
-% propositions, and corollaries are styled the same way.
-% \end{theorem}
-%
-% the environments 'definition', 'lemma', 'proposition', 'corollary',
-% 'remark', and 'example' are defined in the LLNCS documentclass as well.
-%
-% \begin{proof}
-% Proofs, examples, and remarks have the initial word in italics,
-% while the following text appears in normal font.
-% \end{proof}
-% For citations of references, we prefer the use of square brackets
-% and consecutive numbers. Citations using labels or the author/year
-% convention are also acceptable. The following bibliography provides
-% a sample reference list with entries for journal
-% articles~\cite{ref_article1}, an LNCS chapter~\cite{ref_lncs1}, a
-% book~\cite{ref_book1}, proceedings without editors~\cite{ref_proc1},
-% and a homepage~\cite{ref_url1}. Multiple citations are grouped
-% \cite{ref_article1,ref_lncs1,ref_book1},
-% \cite{ref_article1,ref_book1,ref_proc1,ref_url1}.
-%
-% ---- Bibliography ----
-%
-% BibTeX users should specify bibliography style 'splncs04'.
-% References will then be sorted and formatted in the correct style.
-%
-% \bibliographystyle{splncs04}
-% \bibliography{mybibliography}
-%
 \begin{thebibliography}{8}
-
-
-% \bibitem{Rietveld}
-% Rietveld,L. and Hoekstra,R.: YASGUI: not just another SPARQL client,
-% In: The Semantic Web: ESWC 2013 Satellite Events, 78-86. Springer (2013)
-
-% \bibitem{Yamaguchi}
-% Yamaguchi,A. \textit{et~al}.:
-% An intelligent SPARQL query builder for exploration of various life-science databases.
-% In: The 3rd International Workshop on Intelligent Exploration of Semantic Data (IESD 2014) (2014)
 
 \bibitem{sparql}
 SPARQL 1.1 Query Language, W3C Recommendation 21 March 2013. \url{http://www.w3.org/TR/sparql11-query/}
@@ -862,25 +691,5 @@ ASQC provides a simple command-line SPARQL query client.
 \bibitem{sparqlist}
 Katayama, T., & Kawashima, S. (2017). SPARQList: Markdown-Based Highly Configurable REST API Hosting Server for SPARQL. In SWAT4LS.
 
-
-% \bibitem{ref_article1}
-% Author, F.: Article title. Journal \textbf{2}(5), 99--110 (2016)
-
-% \bibitem{ref_lncs1}
-% Author, F., Author, S.: Title of a proceedings paper. In: Editor,
-% F., Editor, S. (eds.) CONFERENCE 2016, LNCS, vol. 9999, pp. 1--13.
-% Springer, Heidelberg (2016). \doi{10.10007/1234567890}
-
-% \bibitem{ref_book1}
-% Author, F., Author, S., Author, T.: Book title. 2nd edn. Publisher,
-% Location (1999)
-
-% \bibitem{ref_proc1}
-% Author, A.-B.: Contribution title. In: 9th International Proceedings
-% on Proceedings, pp. 1--2. Publisher, Location (2010)
-
-% \bibitem{ref_url1}
-% LNCS Homepage, \url{http://www.springer.com/lncs}. Last accessed 4
-% Oct 2017
 \end{thebibliography}
 \end{document}
