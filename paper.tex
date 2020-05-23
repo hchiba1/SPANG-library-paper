@@ -252,7 +252,7 @@ An example query in the SPANG library is shown below.
 The DisGeNet endpoint~\cite{disgenet} is specified.
 
 
-\subsection{SPARQL metadata}
+\subsection{SPARQL Metadata}
 
 We propose a set of SPARQL metadata to annotate each SPARQL query, to make them more reusable.
 Those metadata are added as comment at the head of the SPARQL query, thus that does not violate the SPARQL specification. 
@@ -260,14 +260,14 @@ The set of metadata increase the findability of SPARQL queries.
 
 As a use case, we developed a SPANG API to search for the set of SPARQL queries.
 
-\subsection{SPARQL parameterization}
+\subsection{SPARQL Parameterization}
 
 We propose the parapeterization mechanism of SPARQL query. It is crucial to reuse the SPARQL query for us to improve the productivity of the programming experiance on the Semantic Web platform.
 
 Using SPANG API, users can execute SPARQL query over the Web, with the given parameters.
 
 
-\subsection{SPANG library API}
+\subsection{SPANG Library API}
 According to the metadata and parameterization mechanism, we can construct a controlled set of SPARQL library which is reusable in various settings.
 
 SPANG library is accesible through SPANG Web API.
@@ -285,7 +285,7 @@ The following command returns the list of query in a library.
 
 The results is shown in Figure~\ref{fig:lib-api-out} as JSON format.
 
-\subsection{SPANG query API}
+\subsection{SPANG Query API}
 
 The following command returns the result of the query, with the given paramter.
 
@@ -300,7 +300,7 @@ Figure~\ref{fig:spang_disease_gene_result} shows the result of the query. Thus, 
 The following command searches for queries with keywords.
 
 
-\subsection{SPANG portal}
+\subsection{SPANG Server}
 SPANG is originally developed for "SARQLing" the RDF dataset from command line. Here, we re-implemented the SPANG using Node.js and now the functionality is available through Web browser. 
 
 
@@ -443,12 +443,13 @@ A short name for the SPARQL template, descriptin of the query, and example param
 
 SPANG is implemented in JavaScript using the Node.js technology~\cite{nodejs}. Thus, it can be called in JavaScript applications, and also in the command-line environment.
 
-\subsection{Template specifications}
+\subsection{Template Specifications}
 SPANG template syntax is an extension of sparql-doc. Although the sparql-doc aims at documentation of SPARQL originally, this notation is suitable for annotating each SPARQL query with metadata in the frame of SPARQL query. Each query can be still used as standard SPARQL query, and furthermore, if a parser for comment liens is implemented, users can obtain the metadata for the queries.
 Here, we consider the parameterization in this frame. We consider the parameters of the query as metadata of SPARQL.
 As a syntax parameterization, we consider mustash notation.
 
-\subsection{Template engine}
+
+\subsection{Template Engine}
 SPANG template engine is implemented, where each template can be transformed into abstract syntax tree, and then reconstructed into SPARQL. 
 We used PEG~\cite{peg} expression of SPARQL grammar originally expressed in EBNF in the SPARQL specification. The original implementation of PEG.js~\cite{pegjs} of SPARQL grammar is provided by rdfstore-js project (https://github.com/antoniogarrote/rdfstore-js).
 The PEG.js code was modified to fit the use in the case of SPANG library.
@@ -457,7 +458,7 @@ The PEG.js is a parser generator, thus, we could generate our own parser based o
 We also developed a formatter to stringify the JSON object into string text. Thus, we can reformat the input SPARQL.
 
 
-\subsection{Coding rules}
+\subsection{Coding Rules}
 We defined a coding rule for SPARQL and its extension in SPANG framework. Coding rule is important for productivity of shared coding tasks and effective maintenance. It also helps to make debug process easier; weird look suggests possible bugs. 
 \begin{itemize}
     \item Header lines: query can start with header lines as comment lines. Metadata can be added at the top of the query as comment lines. Multiple lines are allowed. If multiple lines are described, they are written in sequential without blank lines. After the metadata lines, a blank line comes.
@@ -477,35 +478,35 @@ We developed a reformatter of the SPARQL code as described below.
 
 
 \subsection{JavaScript Application}
-SPANG is now implemented in JavaScript, so the SPARQL queries can be executed in JavaScript code across the internet. To avid CORS retriction, it can access CDN services such as jsDelivr~\cite{jsdelivr} as shown in Figure~\ref{fig:jsdelivr}.
+SPANG is now implemented in JavaScript, so the SPARQL queries can be executed in JavaScript code across the internet. To avid CORS retriction, it can access through content delivery network services, such as jsDelivr~\cite{jsdelivr}, as shown in Figure~\ref{fig:jsdelivr}.
 
 
 
 \begin{figure}[!t]
 \begin{scriptsize}
 \begin{verbatim}
-spang.getTemplate('https://raw.githubusercontent.com/hchiba1/spang-library/master/li
-brary/uniprot/count_org.rq', (template) => {
-result = spang.query(template, 'https://sparql.uniprot.org', { abbr: true, format:
-'tsv'}, (error, res, body) => { console.log(body); } );
-})
+spang.getTemplate('https://cdn.jsdelivr.net/gh/hchiba1/spang-library@latest/library/uniprot/count_org.rq', 
+(template) => {
+  result = spang.query(template, 'https://sparql.uniprot.org', { abbr: true, format:'tsv'}, 
+  (error, res, body) => { console.log(body); });
+});
 \end{verbatim}
 \end{scriptsize}
-\caption{Call SARQL in a JavaScript application}
+\caption{Use of SPARQL library in a JavaScript application}
 \label{fig:jsdelivr}
 \end{figure}
 
 
 \subsection{Command-line Client}
 As an interface the the SPANG library, we constructed a command-line interface.
-Originally, SPANG was developed as a command line client using Perl language~\cite{spang}.
-It is re-implemented in JavaScript using Node.js as SPANG2.
+Originally, SPANG was developed as a command line client in Perl~\cite{spang}.
+It is re-implemented in JavaScript using Node.js as \texttt{SPANG2}.
 SPARQL templates can be executed in command line.
 The following example command line gives a parameter to the query template, and execute to the DisGeNet endpoint
 
-\texttt{spang2 gene\_disease.rq --param disease=C0751955}
+\texttt{spang2 disease\_gene.rq --param disease=C0751955}
 
-The template can be URL that returns a SPARQL query. The full usages of the command is as shown in Figure~\ref{fig:spang-command}.
+The template can be URL that returns a SPARQL query, such as \url{https://cdn.jsdelivr.net/gh/hchiba1/spang-library@latest/library/disgenet/disease_gene.rq}. The full usages of the command is as shown in Figure~\ref{fig:spang-command}.
 
 
 \begin{figure}[!t]
@@ -539,7 +540,7 @@ Options:
 
 \end{verbatim}
 \end{scriptsize}
-\caption{SPANG command usage}
+\caption{Usage of the \texttt{SPANG2} command}
 \label{fig:spang-command}
 \end{figure}
 
