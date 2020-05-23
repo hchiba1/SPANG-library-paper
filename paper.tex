@@ -97,10 +97,10 @@ Using the template query with parameters, the same query can be applied to many 
 % In that case also, values to the parameters can replace them.
 % Another mechanism to use template is to give binding to the variables.
 
-Contributions of this work:
-we provide a SPARQL meta data required for constucting SPARQL queries.
-we constructed template engines for SPARQL queries.
-we constructed controlled SPARQL queries for available SPARQL endpoints.
+Contributions of this work is 
+1) we provide a SPARQL meta data required for constucting SPARQL queries;
+2) we constructed template engines for SPARQL queries; and
+3) we constructed controlled SPARQL queries for available SPARQL endpoints.
 
 
 
@@ -120,7 +120,7 @@ Figure~\ref{fig:spang_top} is the top page of SPANG, which includes links to Git
 \begin{figure}
 \center
 \includegraphics[width=1.0\textwidth]{spang_top.png}
-\caption{SPANG web site}
+\caption{SPANG server top page}
 \label{fig:spang_top}
 \end{figure}
 
@@ -155,7 +155,7 @@ The process of making SPARQL FAIR ("FAIRification") can be described in multiple
 Most of the requirements for findability and accessibility can be achieved at the metadata level. Interoperability and reuse requires more efforts at the SPARQL code level.
 
 
-\subsection{Findability of SPARQL queries}
+\subsection{Findability}
 The first step is using data to find SPARQL queries. Metadata should be easy to find for both humans and computers. Machine-readable metadata are essential for automatic discovery of resources, so this is essential component.
 % \begin{itemize}
 %     \item Assign global identifier
@@ -171,7 +171,7 @@ The SPARQL metadata includes: title, description, target endpoint, and parameter
 
 Indexing of SPARQL queries are conducted and thus users can obtain specific queries of interest through a search API.
 
-\subsection{Accessibility to SPARQL queries}
+\subsection{Accessibility}
 Once the user finds the required data, the user needs to know how can they be accessed, possibly including authentication and authorisation.
 % \begin{itemize}
 %     \item Retrievable by identifier
@@ -181,7 +181,7 @@ Once the user finds the required data, the user needs to know how can they be ac
 Some of the SPARQL libraries are accessible from internet. Howver, we could consider more general scheme for accesibility. In the FAIR principle, accessibility includes minting URI for each resource. Here we propose to use stable URI for each SPARQL query.
 In the case of SPANG library, we assign two URI for each query. One is for retrieving SPARQL query string, thereby users can retrieve the concrete content of the query. Another is URI to get results. This URI can include the parameter settings for the specified query.
 
-\subsection{Interoperability of SPARQL queries}
+\subsection{Interoperability}
 The ultimate goal of FAIR is to optimise the reuse of data. To achieve this, metadata should be well-described so that they can be replicated and/or combined in different settings.
 % \begin{itemize}
 %     \item Richly described with a plurality of accurate and relevant attributes
@@ -201,7 +201,7 @@ The data usually need to be integrated with other data. In addition, the data ne
 
 SPARQL specification is proposed for interoperable use of queries to the Semantic Web. It is valuable to use several triplestore implementation through the same programming interface. However, no rule is proposed for coding rules; capitalization, indentation and newline, etc. Lack of those rules result in variation of SPARQL queries, which hampers the reuse of SPARQL queries. In other languages, some coding ruels exist. In the case of SPARQL, specification document or text books do not follow a specific coding rules. Here, we specify the coding rule used in SPANG template library, and implemented spfmt command to reformat of the code.
 
-\subsection{Reusability of SPARQL queries}
+\subsection{Reusability}
 Reusability of SPARQL is not a new topic. Various activity is conducted to construct libraries of SPARQL. It is considered as acitivities to increase the reusability of SPARQL queries. However, no standard to increase the reusability is proposed. In the specifiation of SPARQL, reusability is not a centroal topic. However, it is an central resource in a Semantic Web. If it is a component of Semantic Web comprised of RDF/OWL/SPARQL, it is reasonable to represent it in RDF framework. We propose a way to represent SPARQL in the RDF framework.
 
 Templating is also a key issue for reusability. SPARQL specifications do not includes templating mechanism, but without templating, each SPARQL queries are not applicable to other use cases. We implemented templating mechanism using a general freamework, mustash.
@@ -243,7 +243,7 @@ ORDER BY DESC(?score) ?source ?pmid
 \end{figure}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
-\section{SPANG Library}
+\section{SPANG Library and Use Cases}
 %%%%%%%%%%%%%%%%%%%%%%%%%
 
 The core of the SPANG specification is the SPARQL metadata and templating mechanism for increasing the reusability of the SPARQL queries.
@@ -438,7 +438,7 @@ A short name for the SPARQL template, descriptin of the query, and example param
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Specifications and Implementation Details}
+\section{Specifications}
 %%%%%%%%%%%%%%%%%%%%%%%%%
 
 SPANG is implemented in JavaScript using the Node.js technology~\cite{nodejs}. Thus, it can be called in JavaScript applications, and also in the command-line environment.
@@ -482,7 +482,7 @@ SPANG server is developed using Ruby on Rails. And it can be run on Docker. The 
 SPANG library API and query API are developed in Ruby on Rails. The docker version of the SPANG includes the Ruby on Rails implementation of the SPANG APIs.
 
 
-\subsection{Using in JavaScript applications}
+\subsection{JavaScript}
 SPANG is now implemented in JavaScript, so the SPARQL queries can be executed in JavaScript code across the internet. To avid CORS retriction, it can access CDN services such as jsDelivr~\cite{jsdelivr} as shown in Figure~\ref{fig:jsdelivr}.
 
 
@@ -502,7 +502,7 @@ result = spang.query(template, 'https://sparql.uniprot.org', { abbr: true, forma
 \end{figure}
 
 
-\subsection{SPANG command line client}
+\subsection{Command-line client}
 As an interface the the SPANG library, we constructed a command-line interface.
 
 Originally, SPANG was developed as a command line client using Perl language~\cite{spang}.
@@ -510,7 +510,7 @@ It is re-implemented in JavaScript using Node.js.
 SPARQL templates can be executed in command line.
 
 
-\subsection{SPANG command: calling libraries}
+\subsubsection{Calling libraries}
 
 Although SPARQL shortcuts are useful for simple querying with typical query patterns, they do not cover various
 queries with complicated patterns. 
@@ -538,7 +538,7 @@ The following example command line gives a parameter to the query template, and 
 \texttt{spang gene\_disease.rq --param disease=C0751955}
 
 
-\subsection{SPANG command: combinatorial execution}
+\subsubsection{Combinatorial execution}
 
 SPANG combines multiple queries through a Unix pipe. 
 Combining a {\tt spang} command in shortcut mode and another one in template mode is also possible.
