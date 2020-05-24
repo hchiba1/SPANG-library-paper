@@ -59,9 +59,9 @@ An increasing number of datasets have been published in the Resource Description
 SPARQL is the standardized interface to RDF and contributing effective reuse of distributed RDF data. 
 How can we maximize the value of accumulated SPARQL~\cite{sparql} queries?
 Reuse of the queries is the key of this problem.
-Although eco-systems for developing SPARQL have been developed, writing SPARQL codes often becomes a burden for the Semantic Web users. 
-SPARQL queries have been written in many Semantic Web projects, which requires efforts of developers. 
-For effective enrichment of the Semantic Web, reuse of such queries are valuable.
+Although eco-systems for developing SPARQL have been developed, writing SPARQL codes often becomes a burden for the Semantic Web developers and users. 
+SPARQL queries have been written in many Semantic Web projects, which requires efforts. 
+For effective construction of the Semantic Web applications, reuse of such queries are valuable.
 % Reusability is the key to maximize the value of accumulated open data and software.
 However, due to the limitation of SPARQL specifications, such as the lack of parameterization mechanism, the reuse of those queries are limited. 
 % Reusing SPARQL queries are important for efficient development of the Semantic Web.
@@ -69,6 +69,7 @@ However, due to the limitation of SPARQL specifications, such as the lack of par
 
 %The FAIR principle~\cite{fair} could be suitable for addressing this issue.
 One of the key principle in recent days of the Semantic Web community is the FAIR (findable, accessible, interoperable and reusable) principle~\cite{fair}.
+The ultimate goal of FAIR is to optimise the reuse of resources. 
 The Semantic Web is comprised of various specifications, including RDF~\cite{rdf}, OWL~\cite{owl}, and SPARQL~\cite{sparql}. The ontologies written in OWL are accumulated and shared on repositories~\cite{bioportal}.
 RDF datasets are also accumulated and hosted in portal web sites~\cite{rdf-portal}.
 Not only the ontologies and datasets, but also the queries are important for the Semantic Web.
@@ -101,31 +102,29 @@ Using the template query with parameters, the same query can be applied to many 
 % Another mechanism to use template is to give binding to the variables.
 %Are SPARQL queries accessible? 
 Accessibility to SPARQL queries should also be reconsidered.
-afIn most cases, those queries are not accessible. According to the FAIR principle, resources should be accessible by through URI. In some cases, SPARQL queries are stored in repositories. But they do not have stable URIs. How about findability? 
+In most cases, those queries are not accessible. According to the FAIR principle, resources should be accessible by through URI. In some cases, SPARQL queries are stored in repositories. But they do not have stable URIs. How about findability? 
 In many Semantic Web projects, 
 %SPARQL queries are written and accumulated. However, those SPARQL queries 
 %are not findable, due to the lack of export and import SPARQL queries.
 SPARQL queries are not exposed to the web in a reusable form, nor indexed by metadata in a findable form.
 
-In this study, we show the step to make SPARQL queries FAIR to maximize the value of written SPARQL queries.
-Contributions of this work is demonstrating how to
+In this study, we show the steps to make SPARQL queries FAIR to maximize the value of written SPARQL queries:
 1) assign meta data to SPARQL queries;
 2) parameterize the SPARQL queries;
 3) assign global identifiers;
 4) construct a server for providing queries.
-
-
+And we demonstrate the steps to construct the SPANG template library, which is reusable on the Semantic Web platform.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%
-\section{SPANG Overview}
+\section{SPANG Project Overview}
 %%%%%%%%%%%%%%%%%%%%%%%%
-
-In this study, we review FAIR principles and describe how to apply the principle to SPARQL.
-Further, we demonstrate how to use the SPANG template library.
-Then, we describe the details of SPANG template specifications.
 
 Figure~\ref{fig:spang_top} is the top page of SPANG server, which provides access to a SPANG library, links to GitHub repositories of the SPANG project, and documentations. The SPANG project consists of SPANG server, SPANG library, SPANG API, and SPANG command. The central topic of this paper is how to construct the SPANG library in an interoperable and reusable way. It also provides the foundation of findability and accessibility through SPANG API and command.
+
+In the following sections, we review FAIR principles and describe how to apply the principle to SPARQL.
+Further, we demonstrate how to use the SPANG template library.
+Then, we describe the details of SPANG template specifications.
 
 %The following section includes: overview of the SPANG project, specification of SPANG templates, implementation of the SPANG library, and use case of SPANSG library.
 
@@ -140,12 +139,15 @@ Figure~\ref{fig:spang_top} is the top page of SPANG server, which provides acces
 %%%%%%%%%%%%%%%%%%%%%%%%
 \section{Making SPARQL Queries FAIR}
 %%%%%%%%%%%%%%%%%%%%%%%%
-Here we review the preliminaries for the FAIR principle
-and provide the FAIR principle in the context of SPARQL queries.
+
 The FAIR guiding principle aims to enhance the Findability, Accessibility, Interoperability and Reusability of digital resources.
 It shoul be noted that the FAIR principle can be applied not only to the dataset resources but also to other type of resources including software tools.
 Not only the RDF dataset, but also the SPARQL queries are important resource to be shared on the Semantic Web platform. Thus, we tried to apply the FAIR principle which have been applied to the RDF datasets, into SPARQL queries.
-
+In the following subsections, we review the preliminaries for the FAIR principle
+and provide the FAIR principle in the context of SPARQL queries.
+We review each item in the following subsections.
+In the following subsections, the target of FAIR principle is extended from data to resource.
+We consider a SPARQL query as a resource.
 
 %The core technology constituting the Semantic Web is RDF, OWL, and SPARQL. 
 %RDF and OWL follows the FAIR principle. However, SPARQL is not FAIR.
@@ -175,13 +177,10 @@ Metadata should be easy to find for both humans and computers. Machine-readable 
 % \end{itemize}
 To make SPARQL queries findable, we propose to add metadata to SPARQL.
 The SPARQL metadata includes: title, description, target endpoint, and parameters with its name, default value, and classes.
-Indexing of SPARQL queries are conducted and thus users can obtain specific queries of interest through a search API.
-We review each item in the following subsections.
-In the following subsections, the target of FAIR principle is extended from data to resource.
-We consider a SPARQL query as a resource.
+Indexing of SPARQL queries are conducted and thus users can obtain specific queries of interest through application programming interfaces (APIs).
 
 \subsection{Accessibility}
-To be accessible, resource should be retrievable by identifier, and metadata should be also available even if the resource are no longer available.
+To be accessible, resource should be retrievable by identifier.
 %Once the user finds the required data, the user needs to know how can they be accessed, possibly including authentication and authorisation.
 % \begin{itemize}
 %     \item Retrievable by identifier
@@ -194,6 +193,8 @@ Here we propose to use stable URI for each SPARQL query.
 In the case of SPANG library, we assign two URIs for each query. 
 One is for retrieving SPARQL query string, thereby users can retrieve the concrete content of the query. 
 Another is URI to get results. This URI can include the parameter settings for the specified query.
+Also, according to the FAIR principle, metadata of each resource should be also available even if the resource are no longer available. 
+We assume that API can provide the metadata for each SPARQL query even if the query is no longer available.
 
 \subsection{Interoperability}
 For interoperability, a formal, accessible, shared, and broadly applicable language is necessary.
@@ -208,10 +209,10 @@ In addition, the resource need to interoperate with application or workflows for
 SPARQL specification is proposed for interoperable use of queries to the Semantic Web. 
 It is valuable to use several triplestore implementation through the same programming interface. 
 However, standard SPARQL specifications do not include coding rules; capitalization, indentation and newline, etc. 
-Lack of those rules result in variation of SPARQL queries, which hampers the reuse of SPARQL queries. 
+Lack of those rules result in variation of SPARQL queries, which hampers the efficiency in collaborative development of SPARQL queries. 
 In other languages, coding rules exist in most cases. 
 In the case of SPARQL, even specification document or text books do not follow a specific coding rules. 
-In this study, we specify the coding rule used in SPANG template library, and implemented a formatter command to evaluate and reformat the input SPARQL code.
+Thus, we specify the coding rule used in SPANG template library, and implemented a formatter command to evaluate and reformat the input SPARQL code.
 
 \subsection{Reusability}
 
@@ -225,8 +226,9 @@ In this study, we specify the coding rule used in SPANG template library, and im
 % \end{itemize}
 
 %Reusability of SPARQL is not a new topic. 
-In the specification of SPARQL, reusability is not a central topic. 
-However, it is an central resource in a Semantic Web, it is valuable to share and reuse SPARQL queires.
+The ultimate goal of FAIR is to optimise the reuse of resources. 
+However, in the specification of SPARQL, reusability is not a central topic. 
+Since it is an central resource in a Semantic Web, it is valuable to share and reuse SPARQL queries.
 Templating is a key for reusability. 
 SPARQL specifications do not includes templating mechanism, but without templating, each SPARQL queries are not applicable to other use cases. 
 We implemented templating mechanism using a general freamework, mustache.
@@ -238,10 +240,11 @@ It is considered as activities to increase the reusability of SPARQL queries. Ho
 
 
 \subsection{FAIRification of SPARQL}
-The process of making SPARQL FAIR ("FAIRification") can be described in multiple steps~\cite{fairification}.
+The process of making resource FAIR ("FAIRification") can be described in multiple steps~\cite{fairification}.
 Most of the requirements for findability and accessibility can be achieved at the metadata level. 
-Interoperability and reusability requires more efforts at the SPARQL code level.
-
+Interoperability and reusability requires more efforts at the resource level.
+The same strategy can be applied to the SPARQL queries.
+The following section describes how we constructed the SPANG library which follows the FAIR principle.
 
 \begin{figure}[!t]
 \begin{scriptsize}
@@ -272,18 +275,21 @@ ORDER BY DESC(?score) ?source ?pmid
 
 \end{verbatim}
 \end{scriptsize}
-\caption{Example query in SPANG library}
+\caption{Example query in the SPANG library}
 \label{fig:example-sparql}
 \end{figure}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
 \section{SPANG Library and Use Cases}
 %%%%%%%%%%%%%%%%%%%%%%%%%
-
-The core of the SPANG specification is the SPARQL metadata and templating mechanism for increasing the reusability of the SPARQL queries.
-
-An example query in the SPANG library is shown in Figure~\ref{fig:example-sparql}.
-The DisGeNet endpoint~\cite{disgenet} is specified.
+In the previous section we review the FAIR principle in the context of SPARQL queries.
+In this section, we describe how we constructed the SPANG library with some use cases.
+The use case shown in this section includes the query to the DisGeNet endpoint~\cite{disgenet}, which is shown in Figure~\ref{fig:example-sparql}.
+This query retrieve protein IDs involved in a specific disease.
+The core of the SPANG library specification is the SPARQL metadata and templating mechanism for increasing the reusability of the SPARQL queries.
+The query example includes metadata at the beginning of the query as comment lines.
+The query also includes a parameter for a disease identifier.
+According to the metadata and parameterization mechanism, we can construct a controlled set of SPARQL library which is reusable in various settings.
 
 
 \subsection{SPARQL Metadata}
@@ -292,56 +298,47 @@ We propose a set of SPARQL metadata to annotate each SPARQL query, to make them 
 Those metadata are added as comment at the head of the SPARQL query, thus that does not violate the SPARQL specification. 
 The set of metadata increase the findability of SPARQL queries.
 
-As a use case, we developed a SPANG API to search for the set of SPARQL queries.
-
-\subsection{SPARQL Parameterization}
-
-We propose the parapeterization mechanism of SPARQL query. It is crucial to reuse the SPARQL query for us to improve the productivity of the programming experiance on the Semantic Web platform.
-
-Using SPANG API, users can execute SPARQL query over the Web, with the given parameters.
-
-
-\subsection{SPANG Library API}
-According to the metadata and parameterization mechanism, we can construct a controlled set of SPARQL library which is reusable in various settings.
-
-SPANG library is accesible through SPANG Web API.
-
+We developed a SPANG library API to search for the set of SPARQL queries.
+SPANG library is accessible through SPANG Web API.
 The following command returns the list of libraries.
 
 \texttt{curl https://spang-portal.dbcls.jp/api/library}
 
 The results is shown in Figure~\ref{fig:libs-api-out} as JSON format.
-
-
 The following command returns the list of query in a library.
 
 \texttt{curl https://spang-portal.dbcls.jp/api/library/disgenet}
 
 The results is shown in Figure~\ref{fig:lib-api-out} as JSON format.
+The following command searches for queries with keywords.
 
-\subsection{SPANG Query API}
+\texttt{curl https://spang-portal.dbcls.jp/api/search?keyword=gene}
 
-The following command returns the result of the query, with the given paramter.
+
+\subsection{SPARQL Parameterization}
+
+We propose the parameterization mechanism of SPARQL query. It is crucial to reuse the SPARQL query for us to improve the productivity of the programming experience on the Semantic Web platform.
+
+Using SPANG API, users can execute SPARQL query over the Web, with the given parameters.
+The following command returns the result of the query, with the given parameter.
 
 \texttt{curl https://spang-portal.dbcls.jp/api/library/disgenet/gene\_disease.rq?arg1=678}
 
 
-
-Figure~\ref{fig:spang_disease_gene_query} shows a query for DiesGeNet SPARQL endpoint to get disase gene relationship. 
+Figure~\ref{fig:spang_disease_gene_query} shows a query for DisGeNET SPARQL endpoint to get disease gene relationship. 
 Figure~\ref{fig:spang_disease_gene_result} shows the result of the query. Thus, users can get the results only by clicking on the web pages, browsing the SPARQL template on the SPANG web site.
 
 
-The following command searches for queries with keywords.
 
 
 \subsection{SPANG Server}
-SPANG is originally developed for "SARQLing" the RDF dataset from command line. Here, we re-implemented the SPANG using Node.js and now the functionality is available through Web browser. 
+SPANG is originally developed as a SPARQL client to query the RDF dataset from command line. Here, we re-implemented the SPANG using Node.js and now the functionality is available through Web browsers. 
 
 
 Figure~\ref{fig:spang_lib} is the list of the target SPARQL endpoints. It also lists the SPARQL templates available in general for various endpoints.
 
-Figure~\ref{fig:spang_lib} is the list of SPARQL templates for DisGeNet SPARQL endpoint.
-A short name for the SPARQL template, descriptin of the query, and example parameters are shown.
+Figure~\ref{fig:spang_lib} is the list of SPARQL templates for DisGeNET SPARQL endpoint.
+A short name for the SPARQL template, description of the query, and example parameters are shown.
 
 
 \begin{figure}
@@ -467,8 +464,6 @@ A short name for the SPARQL template, descriptin of the query, and example param
 
 
 
-
-\texttt{curl https://spang-portal.dbcls.jp/api/search?keyword=gene}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
