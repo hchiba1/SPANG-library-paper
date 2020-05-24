@@ -322,7 +322,7 @@ A short name for the SPARQL template, description of the query, and example para
 \end{figure}
 
 
-\subsection{Assigning Metadata}
+\subsection{Metadata Assignment and Usage}
 
 We propose a set of SPARQL metadata to annotate each SPARQL query, to make them more findable.
 Those metadata are added as comment at the head of the SPARQL query, thus that does not violate the SPARQL specification. 
@@ -345,7 +345,7 @@ The following command searches for queries with keywords.
 \texttt{curl https://spang-portal.dbcls.jp/api/search?keyword=gene}
 
 
-\subsection{SPARQL Parameterization}
+\subsection{Parameterizing SPARQL}
 
 We propose the parameterization mechanism of SPARQL query. It is crucial to reuse the SPARQL query for us to improve the productivity of the programming experience on the Semantic Web platform.
 
@@ -455,14 +455,14 @@ Figure~\ref{fig:spang_disease_gene_result} shows the result of the query. Thus, 
 \begin{figure}
 \center
 \includegraphics[width=1.0\textwidth]{spang_disease_gene_query.png}
-\caption{SPANG templates for DisGeNet SPARQL endpoint}
+\caption{SPANG templates for searching DisGeNET}
 \label{fig:spang_disease_gene_query}
 \end{figure}
 
 \begin{figure}
 \center
 \includegraphics[width=1.0\textwidth]{spang_disease_gene_result.png}
-\caption{SPANG templates for DisGeNet SPARQL endpoint}
+\caption{DisGeNET search result}
 \label{fig:spang_disease_gene_result}
 \end{figure}
 
@@ -509,9 +509,14 @@ We developed a reformatter of the SPARQL code as described below.
 \section{Availability}
 %%%%%%%%%%%%%%%%%%%%%%
 
+\subsection{SPANG Server}
+SPARQL queries can be executed in Web site (\url{https://spang.dbcls.jp/}).
+SPANG server is developed using Ruby on Rails. And it can be run on Docker. The SPANG query library is published on GitHub. Thus, users can run a portal site by their own. The SPANG APIs are available on the SPANG server.
+
+
 
 \subsection{JavaScript Application}
-SPANG is now implemented in JavaScript, so the SPARQL queries can be executed in JavaScript code across the internet. To avid CORS retriction, it can access through content delivery network services, such as jsDelivr~\cite{jsdelivr}, as shown in Figure~\ref{fig:jsdelivr}.
+SPANG is now implemented in JavaScript, so the SPARQL queries can be executed in JavaScript code across the internet. To allow Cross-Origin Resource Sharing (CORS), it can access through content delivery network services, such as jsDelivr~\cite{jsdelivr}, as shown in Figure~\ref{fig:jsdelivr}.
 
 
 
@@ -531,11 +536,11 @@ spang.getTemplate('https://cdn.jsdelivr.net/gh/hchiba1/spang-library@latest/libr
 
 
 \subsection{Command-line Client}
-As an interface the the SPANG library, we constructed a command-line interface.
+As an interface the the SPANG library, a Unix command-line interface is also available.
 Originally, SPANG was developed as a command line client in Perl~\cite{spang}.
-It is re-implemented in JavaScript using Node.js as \texttt{SPANG2}.
+It is now re-implemented in JavaScript using Node.js as \texttt{SPANG2}.
 SPARQL templates can be executed in command line.
-The following example command line gives a parameter to the query template, and execute to the DisGeNet endpoint
+The following example command line gives a parameter to the query template, and execute to the DisGeNET endpoint.
 
 \texttt{spang2 disease\_gene.rq --param disease=C0751955}
 
@@ -576,11 +581,6 @@ Options:
 \caption{Usage of the SPANG command}
 \label{fig:spang-command}
 \end{figure}
-
-
-\subsection{SPANG Server}
-SPARQL queries can be executed in Web site.
-SPANG server is developed using Ruby on Rails. And it can be run on Docker. The SPANG query library is published on GitHub. Thus, users can run a portal site by their own. The SPANG APIs are available on the SPANG server.
 
 
 % \subsubsection{Calling libraries}
@@ -631,29 +631,26 @@ SPANG server is developed using Ruby on Rails. And it can be run on Docker. The 
 %%%%%%%%%%%%%%%%%%%%%%
 \section{Related Work}
 %%%%%%%%%%%%%%%%%%%%%%
+In this study, we put rich metadata into queries, and registered in a searchable resource.
+To the best of our knowledge, this is the first study to consider the FAIRification process comprehensively and show the concrete process of the FAIRification of it.
 
-SPARQL tempalting mechanisms have been implemented in various projects. Based on the templating mechanisms, SPARQL libraries have been implemented, such as Bioqueries. SPARQList is a framework to store SPARQL templates to be used through API.
+SPARQL tempalting mechanisms have been implemented in various projects. Based on the templating mechanisms, SPARQL libraries have been implemented, such as Bioqueries~\cite{bioqueries}. Bioqueries~\cite{bioqueries} have tried to collect SPARQL queries as community effort. It increase the findability and reusability.
+However, the query can only be executed on the web site.
+Users should copy and paste the queries into their own software.
+In contrast, we tried to build a software network on top of the Semantic Web platform.
+
+SPARQList is a framework to store SPARQL templates to be used through API. SPARQList~\cite{sparqlist} is a REST API server which executes a SPARQL query, transform the result into formatted data if defined. In SPARQList, configuration of the SPARQL queries such as parameters of the API, SPARQL endpoints is written in the Markdown format. SPARQList server can be considered as a repository of SPARQL queries. In terms of the FAIR principle, findability should be enhanced. That is, 1) queries are assigned with globally unique and persistent identifier; 2) queries are described with rich metadata; 3) metadata clearly and explicitly include the identifier of the data they describe; 4) queries are registered or indexed in a searchable resource.
+
+SPARQL inferencing notation (SPIN) specifications~\cite{spin} includes the RDF expression of SPARQL queries. This addressed the interoperability and reusability of SPARQL queries, but it did not explicitly addressed the findability and accessibility. Metadata for SPARQL queries is important for findability. And identifier is important for accessibility.
+
+Client for calling parameterized queries is still limited.
+ASQC~\cite{asqc} command enables the execution of parameterized queries or queries with given variable bindings. However, it is still not possible to execute the queries published online across the Web.
 
 As a SPARQL formatter, some software are available.
 rdfstore-js\cite{rdfstore-js} has SPARQL parser, but does not have formatter.
 SPARQL.js~\cite{sparql-js} implements parser and formatter. However, there are no formatting rule explicitly defined.
 Jena package~\cite{jena} includes parser and formatter. However, it does not define formatting rule.
 
-Bioqueries~\cite{bioqueries} have tried to collect SPARQL queries as community effort. It increase the findability and reusability.
-However, the query can only be executed on the web site.
-Users should copy and paste the queries into their own software.
-In contrast, we tried to build a software network on top of the Semantic Web platform.
-
-SPARQList~\cite{sparqlist} is a REST API server which executes a SPARQL query, transform the result into formatted data if defined. In SPARQList, configuration of the SPARQL queries such as parameters of the API, SPARQL endpoints is written in the Markdown format. SPARQList server can be considered as a repository of SPARQL queries. In terms of the FAIR principle, findability should be enhanced. That is, 1) queries are assigned with globally unique and persistent identifier; 2) queries are described with rich metadata; 3) metadata clearly and explicitly include the identifier of the data they describe; 4) queries are registered or indexed in a searchable resource.
-
-SPARQL inferencing notation (SPIN) specifications~\cite{spin} includes the RDF expression of SPARQL queries. This addressed the interoperability and reusability of SPARQL queries, but it did not explicitly addressed the findability and accessibility. Metadata for SPARQL queries is important for findability. And identifier is important for accessibility.
-
-In this study, we put rich metadata into queries, and registered in a searchable resource.
-
-Client for calling parameterized queries is still limited.
-ASQC~\cite{asqc} command enables the execution of parameterized queries or queries with given variable bindings. However, it is still not possible to execute the queries published online across the Web.
-
-To the best of our knowledge, this is the first study to consider the FAIRification process comprehensively and show the concrete process of the FAIRification of it.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -662,12 +659,12 @@ To the best of our knowledge, this is the first study to consider the FAIRificat
 
 SPANG provides a framework for reusing and sharing arbitrary queries across the Web.
 Sharing not only data but also queries (i.e., means of interpreting data) on the Semantic Web platform will help the biological research community collaborate in knowledge integration and discovery.
-Toward the FAIRification of SPARQL, SPANG provides step toward the FAIRification of Semantic Web, not only in terms of 
+Toward the FAIRification of SPARQL, SPANG provides step toward the FAIRification of Semantic Web. 
 If an RDF database provider,
 who knows best the manner in which the database should be used,
 publishes SPARQL template libraries, database usage can be considerably enhanced.
 
-Moreover, it enables users to execute complex queries by combining existing query templates. SPANG, with these unique features, facilitates integrative exploitation of published RDF datasets and supports knowledge discovery. 
+%Moreover, it enables users to execute complex queries by combining existing query templates. SPANG, with these unique features, facilitates integrative exploitation of published RDF datasets and supports knowledge discovery. 
 
 SPANG enables easy and effective access to RDF databases, thereby enhancing integrative exploitation of distributed biological databases.
 Although the predefined configurations included in the software package are available to help users query biological RDF databases, 
@@ -677,7 +674,7 @@ Specifically, SPANG can call SPARQL templates by their URIs across the Web.
 
 To the best of our knowledge, this is the first study to consider the FAIRification process comprehensively and show the concrete process of the FAIRification of it, and addressed the issues in the process. One of the remaining issue is the licensing issue of the SPARQL. The licensing issue requires the community consensus, thus it remains to be discussed. Nevertheless, we clarified the issues on the process, and contributed the increased reusability of the SPARQL queries to make the Semantic Web more useful community.
 
-The SPANG API returns the result in JSON format. The JSON format can be mapped to JSON-LD using JSON-LD mapper, which is compatible with RDF. The future work includes the use of the SPANG resources in the form of RDF.
+Another issue is publishing the content of SPARQL as data, which enables analysis of query content. Currently, the SPANG API returns the result in JSON format. The JSON format can be mapped to JSON-LD using JSON-LD mapper, which is compatible with RDF. The future work includes the use of the SPANG resources in the form of RDF.
 
 
 \section*{Acknowledgements}
