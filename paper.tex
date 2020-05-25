@@ -80,7 +80,7 @@ Accumulating and reusing the queries are important.
 Notably, the FAIR principle can be applied not only to the RDF data, but also other resource, like software.
 % SPARQL is a fundamental technology for querying RDF data contributing an interoperable interface to the Semantic Web. However, is is not designed for reusability. 
 % In data management guideline, FAIR principle is well known~\cite{fair}. Findability, Accesibility, Reusablility should be addressed, to make the most of SPARQL queries as resources. 
-Thsu, applying FAIR principle to SPARQL query should increase the reusability of the queries.
+Thus, applying FAIR principle to SPARQL query should increase the reusability of the queries.
 
 %How can we make SPARQL queries fair? 
 
@@ -91,7 +91,7 @@ Here, we apply the FAIR principle and extend the SPARQL specifications for more 
 %Actually, writing good query requires much efforts, thus, they should be reused to improve the productivity.
 %Thus, considering the reusability of SPARQL queries are crucial to enrich the Semantic Web community.
 %How can we improve the reusability of SPARQL?
-According to the FAIR principle, we identified the process to make SPARQL query reusable.
+According to the FAIR principle, we identify the process to make SPARQL query reusable.
 One of the key to improve the reusability of queries is parameterization.
 Parameterization make the query more reusable.
 Using the template query with parameters, the same query can be applied to many use cases.
@@ -122,7 +122,7 @@ Further, we demonstrate the steps to construct the SPANG template library, which
 %%%%%%%%%%%%%%%%%%%%%%%%
 
 The SPANG~\cite{spang} project stared aiming at maximizing the usability of SPARQL queries, and the project now includes development of SPANG server, SPANG library, SPANG API, and SPANG command. 
-Figure~\ref{fig:spang_top} is the top page of SPANG server, which provides access to a SPANG library, links to GitHub repositories of the SPANG project, and documentations. 
+Figure~\ref{fig:spang_top} is the top page of SPANG project, which provides access to a SPANG library, links to GitHub repositories of the SPANG project, and documentations. 
 The central topic of this paper is how to construct the SPANG library in an interoperable and reusable way. 
 The SPANG library specifications also provide the foundation of findability and accessibility through SPANG API and command.
 
@@ -180,6 +180,7 @@ Metadata should be easy to find for both humans and computers. Machine-readable 
 % \end{itemize}
 To make SPARQL queries findable, we propose to add metadata to SPARQL.
 The SPARQL metadata includes: title, description, target endpoint, and parameters with its name, default value, and classes.
+Examples are shown in Section \ref{subsec:example-sparql}.
 Indexing of SPARQL queries are conducted and thus users can obtain specific queries of interest through application programming interfaces (APIs).
 
 \subsection{Accessibility}
@@ -201,7 +202,7 @@ We assume that API can provide the metadata for each SPARQL query even if the qu
 
 \subsection{Interoperability}
 %For interoperability, a formal, accessible, shared, and broadly applicable language is necessary.
-For interoperability, a shared language is necessary.
+For interoperability, a formal and shared language is necessary.
 The resource usually need to be integrated with other resources. 
 In addition, the resource need to interoperate with application or workflows for analysis, storage, and processing.
 % \begin{itemize}
@@ -209,9 +210,8 @@ In addition, the resource need to interoperate with application or workflows for
 %     \item Use vocabularies that follow FAIR principles.
 %     \item Include qualified references to others
 % \end{itemize}
-
-SPARQL specification is proposed for interoperable use of queries to the Semantic Web. 
-Indeed, it is valuable to use several triplestore implementation through the same programming interface. 
+Indeed, SPARQL specification is proposed for interoperable use of queries to the Semantic Web. 
+It is valuable to use several triplestore implementation through the same programming interface. 
 Nevertheless, standard SPARQL specifications do not include coding rules; capitalization, indentation and newline, etc. 
 Lack of such rules result in variation of SPARQL queries, which hampers the efficiency in collaborative development of SPARQL queries. 
 In the programming languages in general, coding rules exist in most cases. 
@@ -231,7 +231,7 @@ Thus, we specify the coding rule used in SPANG template library, and implemented
 
 %Reusability of SPARQL is not a new topic. 
 The ultimate goal of FAIR is to optimise the reuse of resources. 
-However, in the specification of SPARQL, reusability is not considered as a central topic. 
+However, in the specification of SPARQL, reusability has not been considered as a central topic. 
 Since SPARQL queries is essential resources comprising the Semantic Web, it is valuable to share and reuse SPARQL queries.
 Templating is a key for improving reusability. 
 SPARQL specifications do not includes templating mechanism, but without templating, each SPARQL queries are not applicable to other use cases. 
@@ -250,37 +250,6 @@ Interoperability and reusability requires more efforts at the resource level.
 The same strategy can be applied to the SPARQL queries.
 The following section describes how we constructed the SPANG library which follows the FAIR principle.
 
-\begin{figure}[!t]
-\begin{scriptsize}
-\begin{verbatim}
-# @title Get UniProt IDs for a specific disease, e.g. C0751955 ("Brain Infarction")
-# @endpoint http://rdf.disgenet.org/sparql/
-# @prefix https://raw.githubusercontent.com/hchiba1/spang-library/master/prefix/bio
-# @param arg1=C0751955 
-
-PREFIX disgenet_source: <http://rdf.disgenet.org/v4.0.0/void/>
-PREFIX umls: <http://linkedlifedata.com/resource/umls/id/>
-
-SELECT DISTINCT ?gene ?score ?gene_label ?source ?gda ?pmid ?description
-WHERE {
-    ?gda sio:SIO_000628 umls:{{arg1}} , ?gene ;
-        a ?type ;
-        sio:SIO_000253 ?source ;
-        sio:SIO_000216/sio:SIO_000300 ?score .
-    ?gene a ncit:C16612 ;
-        rdfs:label ?gene_label .
-    OPTIONAL {
-        ?gda sio:SIO_000772 ?pmid ;
-            dct:description ?description .
-    }
-}
-ORDER BY DESC(?score) ?source ?pmid
-
-\end{verbatim}
-\end{scriptsize}
-\caption{Example query in the SPANG template library}
-\label{fig:example-sparql}
-\end{figure}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
 \section{SPANG Template Library with Use Cases}
@@ -290,10 +259,6 @@ In the previous section we review the FAIR principle in the context of SPARQL qu
 In this section, we describe how we constructed the SPANG library with some use cases.
 The core of the SPANG library specification is the SPARQL metadata and templating mechanism for increasing the reusability of the SPARQL queries.
 According to the metadata and parameterization mechanism, we can construct a controlled set of SPARQL library which is reusable in various settings.
-The use case shown in this section includes the query to the DisGeNET endpoint~\cite{disgenet} shown in Figure~\ref{fig:example-sparql}.
-This query retrieves protein IDs involved in a specific disease.
-The query example includes metadata at the beginning of the query as comment lines.
-The query also includes a parameter for a disease identifier.
 
 
 \subsection{SPANG Server}
@@ -467,14 +432,57 @@ Figure~\ref{fig:spang_disease_gene_result} shows the result of the query. Thus, 
 \end{figure}
 
 
+\subsection{Example Query}
+\label{subsec:example-sparql}
 
+An example query to the DisGeNET endpoint~\cite{disgenet} is shown in Figure~\ref{fig:example-sparql}.
+This query retrieves protein IDs involved in a specific disease.
+The query example includes metadata at the beginning of the query as comment lines.
+The query also includes a parameter for a disease identifier \texttt{C0751955} (``Brain Infarction'').
+
+
+\begin{figure}[!t]
+\begin{scriptsize}
+\begin{verbatim}
+# @title Get UniProt IDs for a specific disease, e.g. C0751955 ("Brain Infarction")
+# @endpoint http://rdf.disgenet.org/sparql/
+# @prefix https://raw.githubusercontent.com/hchiba1/spang-library/master/prefix/bio
+# @param arg1=C0751955 
+
+PREFIX disgenet_source: <http://rdf.disgenet.org/v4.0.0/void/>
+PREFIX umls: <http://linkedlifedata.com/resource/umls/id/>
+
+SELECT DISTINCT ?gene ?score ?gene_label ?source ?gda ?pmid ?description
+WHERE {
+    ?gda sio:SIO_000628 umls:{{arg1}} , ?gene ;
+        a ?type ;
+        sio:SIO_000253 ?source ;
+        sio:SIO_000216/sio:SIO_000300 ?score .
+    ?gene a ncit:C16612 ;
+        rdfs:label ?gene_label .
+    OPTIONAL {
+        ?gda sio:SIO_000772 ?pmid ;
+            dct:description ?description .
+    }
+}
+ORDER BY DESC(?score) ?source ?pmid
+
+\end{verbatim}
+\end{scriptsize}
+\caption{Example query in the SPANG template library}
+\label{fig:example-sparql}
+\end{figure}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%
 \section{SPANG Template Specifications}
 %%%%%%%%%%%%%%%%%%%%%%%%%
 
-SPANG is implemented in JavaScript using the Node.js~\cite{nodejs}. Thus, it can be called in JavaScript applications, and also in the command-line environment.
+In the previous section, we describe the SPANG library we developed, with some use cases.
+However, constructing some other implementations following the same specifications.
+In this section, we describe the details of the SPANG template specifications.
+It is possible to implement another interoperable specifications.
+
 
 \subsection{Template Specifications}
 SPANG template syntax is an extension of sparql-doc~\cite{sparql-doc}. Although the sparql-doc aims at documentation of SPARQL originally, this notation is suitable for annotating each SPARQL query with metadata in the frame of SPARQL query. Each query can be still used as standard SPARQL query, and furthermore, if a parser for comment liens is implemented, users can obtain the metadata for the queries.
@@ -508,6 +516,10 @@ We developed a reformatter of the SPARQL code as described below.
 %%%%%%%%%%%%%%%%%%%%%%
 \section{Availability}
 %%%%%%%%%%%%%%%%%%%%%%
+
+
+SPANG is implemented in JavaScript using the Node.js~\cite{nodejs}. Thus, it can be called in JavaScript applications, and also in the command-line environment.
+
 
 \subsection{SPANG Server}
 SPARQL queries can be executed in Web site (\url{https://spang.dbcls.jp/}).
